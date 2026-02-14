@@ -1,21 +1,24 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { rotatingWords } from "@/app/lib/constants";
+
+// Feature Components
+import RotatingText from "@/app/components/features/home/RotatingText";
+import FinalReveal from "@/app/components/features/home/FinalReveal";
+import LogoScreen from "@/app/components/features/home/LogoScreen";
+import BackgroundCircle from "@/app/components/features/home/BackgroundCircle";
 
 export default function ScrollSection() {
   const [wordIndex, setWordIndex] = useState(0);
   const [showFinal, setShowFinal] = useState(false);
+  const [showLogo, setShowLogo] = useState(false);
   const isScrolling = useRef(false);
-  const circleRef = useRef(null);
+  const circleRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = (e: WheelEvent) => {
-      // Prevent default scrolling to ensure "fixed" feel if necessary,
-      // but usually 'passive: false' + preventDefault is needed for true scroll-jacking.
-      // e.preventDefault();
-
       if (isScrolling.current) return;
 
       if (e.deltaY > 0) {
@@ -27,6 +30,8 @@ export default function ScrollSection() {
           } else {
             setShowFinal(true);
           }
+        } else if (!showLogo) {
+          setShowLogo(true);
         }
         setTimeout(() => {
           isScrolling.current = false;
@@ -34,7 +39,9 @@ export default function ScrollSection() {
       } else if (e.deltaY < 0) {
         // Scroll Up
         isScrolling.current = true;
-        if (showFinal) {
+        if (showLogo) {
+          setShowLogo(false);
+        } else if (showFinal) {
           setShowFinal(false);
         } else if (wordIndex > 0) {
           setWordIndex((prev) => prev - 1);
@@ -65,11 +72,15 @@ export default function ScrollSection() {
             } else {
               setShowFinal(true);
             }
+          } else if (!showLogo) {
+            setShowLogo(true);
           }
         } else {
           // Swipe Down / Scroll Up
           isScrolling.current = true;
-          if (showFinal) {
+          if (showLogo) {
+            setShowLogo(false);
+          } else if (showFinal) {
             setShowFinal(false);
           } else if (wordIndex > 0) {
             setWordIndex((prev) => prev - 1);
@@ -90,79 +101,32 @@ export default function ScrollSection() {
       window.removeEventListener("touchstart", handleTouchStart);
       window.removeEventListener("touchmove", handleTouchMove);
     };
-  }, [wordIndex, showFinal]);
+  }, [wordIndex, showFinal, showLogo]);
 
   return (
     <div className="relative h-screen w-full overflow-hidden bg-black">
       <div className="sticky top-0 flex h-screen flex-col overflow-hidden">
-        {/* Center text */}
+        {/* Main Interaction Area */}
         <main className="relative z-20 flex flex-1 items-center justify-center">
           <AnimatePresence mode="wait">
-            {!showFinal ? (
-              <motion.div
-                key="phase-1-container"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0, y: -20, transition: { duration: 0.3 } }}
-                className="flex w-full items-center justify-center gap-3 text-center"
-              >
-                <div className="text-4xl font-light text-white/90 md:text-5xl">
-                  We <span className="italic">build</span>
-                </div>
-                <div className="text-left text-4xl font-bold text-white md:text-5xl">
-                  <AnimatePresence mode="wait">
-                    <motion.div
-                      key={wordIndex}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      transition={{ duration: 0.25 }}
-                    >
-                      {rotatingWords[wordIndex]}
-                    </motion.div>
-                  </AnimatePresence>
-                </div>
-              </motion.div>
+            {!showFinal && !showLogo ? (
+              <RotatingText wordIndex={wordIndex} words={rotatingWords} />
+            ) : showFinal && !showLogo ? (
+              <FinalReveal />
             ) : (
-              <motion.div
-                key="final-text"
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                className="text-center"
-              >
-                <div className="text-3xl font-light text-white/90 md:text-5xl">
-                  We Are
-                </div>
-                <div className="mt-2 text-7xl font-bold leading-none text-white md:text-[120px]">
-                  incial
-                </div>
-              </motion.div>
+              <LogoScreen />
             )}
           </AnimatePresence>
         </main>
 
-        {/* Circle — animated with scroll progress */}
-        <motion.div
-          ref={circleRef}
-          className="pointer-events-none absolute left-1/2 z-10 -translate-x-1/2"
-          initial={{ bottom: "-95%" }}
-          animate={{
-            bottom: showFinal
-              ? "15%" // Moves up significantly for final state
-              : `${-95 + (wordIndex / rotatingWords.length) * 80}%`, // Gradually moves up from -95% to ~-15%
-          }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          style={{
-            width: "min(1000px, 90vw)",
-            height: "min(1000px, 90vw)",
-          }}
-        >
-          <div
-            className="h-full w-full rounded-full"
-            style={{ border: "1px solid rgba(100, 130, 200, 0.35)" }}
-          />
-        </motion.div>
+        {/* Animated Background */}
+        <BackgroundCircle
+          circleRef={circleRef}
+          wordIndex={wordIndex}
+          showFinal={showFinal}
+          showLogo={showLogo}
+          totalWords={rotatingWords.length}
+        />
       </div>
     </div>
   );

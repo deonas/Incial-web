@@ -20,10 +20,8 @@ export const navLinks = [
 
 export const rotatingWords = [
   "Brand",
-  "Experience",
-  "Products",
-  "Solutions",
-  "Future",
+  "Business",
+  "Beyond.",
 ];
 
 export const socialLinks = [
