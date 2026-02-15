@@ -66,7 +66,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${poppins.variable} ${notoSans.variable} ${notoSansJP.variable} ${notoSansKR.variable} ${notoSansMalayalam.variable} ${notoSansDevanagari.variable} ${notoSansArabic.variable} font-[family:var(--font-poppins)] antialiased`}
+        className={`${poppins.variable} ${notoSans.variable} ${notoSansJP.variable} ${notoSansKR.variable} ${notoSansMalayalam.variable} ${notoSansDevanagari.variable} ${notoSansArabic.variable} font-sans antialiased`}
       >
         {children}
       </body>

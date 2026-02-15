@@ -21,7 +21,7 @@ export default function Loading() {
         <motion.div
           key={index}
           lang={currentGreeting.lang}
-          className="flex text-4xl font-semibold text-white sm:text-5xl font-[family:var(--font-noto-stack)]"
+          className="flex text-4xl font-semibold text-white sm:text-5xl font-[var(--font-noto-stack)]"
           initial="hidden"
           animate="visible"
           exit="exit"
