@@ -1,0 +1,110 @@
+name: "🔍 Review / Feedback"
+description: Report an issue, bug, or provide feedback during review
+title: "[Review]: "
+labels: ["review", "needs-triage"]
+assignees:
+  - AbinVarghexe
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reviewing the Incial website! Please share any issues, bugs, or feedback you've found.
+
+  - type: dropdown
+    id: type
+    attributes:
+      label: Type of Feedback
+      options:
+        - "🐛 Bug / Issue"
+        - "🎨 Design / UI Issue"
+        - "📱 Mobile / Responsive Issue"
+        - "⚡ Performance Issue"
+        - "♿ Accessibility Issue"
+        - "💡 Suggestion / Improvement"
+        - "📝 Content / Copy Issue"
+        - "🔗 Broken Link"
+        - "❓ Question"
+    validations:
+      required: true
+
+  - type: input
+    id: page
+    attributes:
+      label: Page / Section
+      description: Which page or section is this about?
+      placeholder: "e.g., Home page - Services section, About Us page, Header navigation"
+    validations:
+      required: true
+
+  - type: textarea
+    id: issue
+    attributes:
+      label: What's the issue?
+      description: Describe what you found or what's not working as expected.
+      placeholder: "Describe the issue clearly..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+      description: What should happen instead? (optional for suggestions)
+      placeholder: "Expected behavior..."
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots / Video
+      description: |
+        Drag and drop screenshots or screen recordings here.
+        Visual evidence helps us fix issues faster!
+
+  - type: dropdown
+    id: browser
+    attributes:
+      label: Browser
+      description: Which browser are you using?
+      options:
+        - Chrome
+        - Firefox
+        - Safari
+        - Edge
+        - Brave
+        - Opera
+        - Mobile Safari (iOS)
+        - Chrome Mobile (Android)
+        - Other
+    validations:
+      required: false
+
+  - type: dropdown
+    id: device
+    attributes:
+      label: Device Type
+      options:
+        - Desktop / Laptop
+        - Tablet (iPad, Android tablet)
+        - Mobile Phone (iPhone)
+        - Mobile Phone (Android)
+    validations:
+      required: false
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      description: How critical is this issue?
+      options:
+        - "🔴 Critical — Blocks functionality"
+        - "🟠 High — Major issue, degrades experience"
+        - "🟡 Medium — Noticeable but not blocking"
+        - "🟢 Low — Minor issue / Nice-to-have"
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Any other information that might help.

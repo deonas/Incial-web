@@ -8,14 +8,14 @@ export const greetings = [
 ];
 
 export const navLinks = [
-  "Home",
-  "About Us",
-  "Products",
-  "Case Study",
-  "Services",
-  "Careers",
-  "Blogs",
-  "Contact Us",
+  { label: "Home", href: "/" },
+  { label: "About Us", href: "/about" },
+  { label: "Products", href: "/#products" },
+  { label: "Case Study", href: "/#case-study" },
+  { label: "Services", href: "/#services" },
+  { label: "Careers", href: "/careers" },
+  { label: "Blogs", href: "/blogs" },
+  { label: "Contact Us", href: "/#contact" },
 ];
 
 export const rotatingWords = [
@@ -25,9 +25,8 @@ export const rotatingWords = [
 ];
 
 export const socialLinks = [
-  { label: "LinkedIn", href: "#" },
-  { label: "X / Twitter", href: "#" },
-  { label: "Instagram", href: "#" },
-  { label: "Facebook", href: "#" },
-  { label: "WhatsApp", href: "#" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/company/incial/" },
+  { label: "Instagram", href: "https://www.instagram.com/incial.in" },
+  { label: "Facebook", href: "https://www.facebook.com/profile.php?id=61571585243145" },
+  { label: "WhatsApp", href: "https://wa.me/+919074549901" },
 ] as const;

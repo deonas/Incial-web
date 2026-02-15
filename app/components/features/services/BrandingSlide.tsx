@@ -63,9 +63,6 @@ export default function BrandingSlide() {
             </svg>
           </motion.div>
         </div>
-
-        {/* Large Decorative Arc on the Right */}
-        <div className="absolute right-[-75%] top-1/2 -translate-y-1/2 w-[180vh] h-[180vh] rounded-full border-white/80 pointer-events-none border-2" />
       </div>
     </div>
   );

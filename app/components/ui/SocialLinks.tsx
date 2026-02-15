@@ -6,12 +6,12 @@ import {
   FaFacebookF,
   FaWhatsapp,
 } from "react-icons/fa";
-import { FaXTwitter } from "react-icons/fa6";
+
 import { socialLinks } from "@/app/lib/constants";
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   LinkedIn: FaLinkedinIn,
-  "X / Twitter": FaXTwitter,
+
   Instagram: FaInstagram,
   Facebook: FaFacebookF,
   WhatsApp: FaWhatsapp,
@@ -35,6 +35,8 @@ export default function SocialLinks({
             href={href}
             aria-label={label}
             className={`transition-colors ${className}`}
+            target="_blank"
+            rel="noopener noreferrer"
           >
             <Icon className="text-lg" />
           </a>

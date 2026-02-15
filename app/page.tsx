@@ -9,8 +9,17 @@ import GreetingsOverlay from "@/app/components/sections/GreetingsOverlay";
 import HeroSection from "@/app/components/sections/HeroSection";
 import ScrollSection from "@/app/components/sections/ScrollSection";
 import ServicesSection from "@/app/components/sections/ServicesSection";
+import TrustSection from "@/app/components/sections/TrustSection";
+import ContactSection from "@/app/components/sections/ContactSection";
 
-type Phase = "greetings" | "hero" | "scrolling" | "services";
+type Phase =
+  | "greetings"
+  | "hero"
+  | "scrolling"
+  | "services"
+  | "trust"
+  | "about"
+  | "contact";
 
 export default function Home() {
   const [phase, setPhase] = useState<Phase>("greetings");
@@ -32,6 +41,8 @@ export default function Home() {
 
   const handleStart = useCallback(() => setPhase("scrolling"), []);
   const handleToggleMenu = useCallback(() => setMenuOpen((prev) => !prev), []);
+
+  const [servicesConfig, setServicesConfig] = useState({ initialSlide: 0 });
 
   return (
     <>
@@ -85,7 +96,12 @@ export default function Home() {
                 exit={{ y: "-100vh", opacity: 0 }}
                 transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
               >
-                <ScrollSection onScrollComplete={() => setPhase("services")} />
+                <ScrollSection
+                  onScrollComplete={() => {
+                    setServicesConfig({ initialSlide: 0 });
+                    setPhase("services");
+                  }}
+                />
               </motion.div>
             )}
           </AnimatePresence>
@@ -96,9 +112,48 @@ export default function Home() {
                 key="services"
                 initial={{ y: "100vh", opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
+                exit={{ y: "-100vh", opacity: 0 }}
                 transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
               >
-                <ServicesSection />
+                <ServicesSection
+                  initialSlide={servicesConfig.initialSlide}
+                  onComplete={() => setPhase("trust")}
+                  onBack={() => setPhase("scrolling")}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <AnimatePresence>
+            {phase === "trust" && (
+              <motion.div
+                key="trust"
+                initial={{ y: "100vh", opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: "-100vh", opacity: 0 }}
+                transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <TrustSection
+                  onBack={() => {
+                    setServicesConfig({ initialSlide: 3 });
+                    setPhase("services");
+                  }}
+                  onComplete={() => setPhase("contact")}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <AnimatePresence>
+            {phase === "contact" && (
+              <motion.div
+                key="contact"
+                initial={{ y: "100vh", opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: "100vh", opacity: 0 }}
+                transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <ContactSection onBack={() => setPhase("trust")} />
               </motion.div>
             )}
           </AnimatePresence>

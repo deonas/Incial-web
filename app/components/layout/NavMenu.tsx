@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { navLinks } from "@/app/lib/constants";
 
 export default function NavMenu() {
@@ -13,16 +14,14 @@ export default function NavMenu() {
       className="fixed left-0 right-0 top-0 z-40 flex items-center justify-center gap-0 bg-white px-6 py-8"
     >
       {navLinks.map((link, i) => (
-        <div key={link} className="flex items-center">
-          <a
-            href="#"
+        <div key={link.label} className="flex items-center">
+          <Link
+            href={link.href}
             className="px-5 text-sm font-medium text-black transition-colors hover:text-black/60"
           >
-            {link}
-          </a>
-          {i < navLinks.length - 1 && (
-            <div className="h-4 w-px bg-black/20" />
-          )}
+            {link.label}
+          </Link>
+          {i < navLinks.length - 1 && <div className="h-4 w-px bg-black/20" />}
         </div>
       ))}
     </motion.nav>

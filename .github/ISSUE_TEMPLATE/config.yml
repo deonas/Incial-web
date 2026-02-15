@@ -1,5 +1,8 @@
 blank_issues_enabled: false
 contact_links:
-  - name: "💬 Questions / Discussions"
+  - name: "� Review Guide"
+    url: https://github.com/incial/Incial-web/blob/main/.github/REVIEW.md
+    about: Read the complete review guide before reporting issues.
+  - name: "�💬 Questions / Discussions"
     url: https://github.com/incial/Incial-web/discussions
     about: Ask questions or start a discussion instead of opening an issue.
