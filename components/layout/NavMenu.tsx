@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { navLinks } from "@/app/lib/constants";
+import { navLinks } from "@/lib/constants";
 
 export default function NavMenu() {
   return (

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import Footer from "@/app/components/layout/Footer";
+import Footer from "@/components/layout/Footer";
 
 interface ContactSectionProps {
   onBack?: () => void;

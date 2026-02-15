@@ -2,15 +2,16 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { greetings } from "@/app/lib/constants";
-import Header from "@/app/components/layout/Header";
-import NavMenu from "@/app/components/layout/NavMenu";
-import GreetingsOverlay from "@/app/components/sections/GreetingsOverlay";
-import HeroSection from "@/app/components/sections/HeroSection";
-import ScrollSection from "@/app/components/sections/ScrollSection";
-import ServicesSection from "@/app/components/sections/ServicesSection";
-import TrustSection from "@/app/components/sections/TrustSection";
-import ContactSection from "@/app/components/sections/ContactSection";
+import { greetings } from "@/lib/constants";
+import { Header, NavMenu } from "@/components/layout";
+import {
+  GreetingsOverlay,
+  HeroSection,
+  ScrollSection,
+  ServicesSection,
+  TrustSection,
+  ContactSection,
+} from "@/components/sections";
 
 type Phase =
   | "greetings"

@@ -2,9 +2,9 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import BrandingSlide from "@/app/components/features/services/BrandingSlide";
-import TechnologySlide from "@/app/components/features/services/TechnologySlide";
-import ExperienceSlide from "@/app/components/features/services/ExperienceSlide";
+import BrandingSlide from "@/components/features/services/BrandingSlide";
+import TechnologySlide from "@/components/features/services/TechnologySlide";
+import ExperienceSlide from "@/components/features/services/ExperienceSlide";
 
 const SLIDES = ["intro", "branding", "technology", "experience"] as const;
 

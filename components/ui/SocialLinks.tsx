@@ -7,7 +7,7 @@ import {
   FaWhatsapp,
 } from "react-icons/fa";
 
-import { socialLinks } from "@/app/lib/constants";
+import { socialLinks } from "@/lib/constants";
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   LinkedIn: FaLinkedinIn,

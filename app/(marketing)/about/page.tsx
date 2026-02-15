@@ -1,8 +1,7 @@
 "use client";
 
-import AboutSection from "@/app/components/sections/AboutSection";
-import Header from "@/app/components/layout/Header";
-import NavMenu from "@/app/components/layout/NavMenu";
+import { AboutSection } from "@/components/sections";
+import { Header, NavMenu } from "@/components/layout";
 import { useState } from "react";
 import { AnimatePresence } from "framer-motion";
 

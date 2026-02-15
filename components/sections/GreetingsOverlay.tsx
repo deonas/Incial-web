@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { greetings } from "@/app/lib/constants";
+import { greetings } from "@/lib/constants";
 
 interface GreetingsOverlayProps {
   greetingIndex: number;

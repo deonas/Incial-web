@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { HiMenuAlt3 } from "react-icons/hi";
 import { IoCloseOutline } from "react-icons/io5";
-import SocialLinks from "@/app/components/ui/SocialLinks";
+import SocialLinks from "@/components/ui/SocialLinks";
 
 interface HeaderProps {
   menuOpen: boolean;

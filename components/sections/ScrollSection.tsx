@@ -2,13 +2,13 @@
 
 import { useRef, useState, useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
-import { rotatingWords } from "@/app/lib/constants";
+import { rotatingWords } from "@/lib/constants";
 
-// Feature Components
-import RotatingText from "@/app/components/features/home/RotatingText";
-import FinalReveal from "@/app/components/features/home/FinalReveal";
-import LogoScreen from "@/app/components/features/home/LogoScreen";
-import BackgroundCircle from "@/app/components/features/home/BackgroundCircle";
+// Components
+import RotatingText from "@/components/features/home/RotatingText";
+import FinalReveal from "@/components/features/home/FinalReveal";
+import LogoScreen from "@/components/features/home/LogoScreen";
+import BackgroundCircle from "@/components/features/home/BackgroundCircle";
 
 interface ScrollSectionProps {
   onScrollComplete?: () => void;

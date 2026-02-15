@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import ClientMarquee from "@/app/components/ui/ClientMarquee";
+import ClientMarquee from "@/components/ui/ClientMarquee";
 
 const stats = [
   { value: "50+", label: "Happy Clients" },

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { greetings } from "@/app/lib/constants";
+import { greetings } from "@/lib/constants";
 
 export default function Loading() {
   const [index, setIndex] = useState(0);
