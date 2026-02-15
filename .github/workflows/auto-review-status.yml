@@ -8,19 +8,15 @@ jobs:
   add-to-project:
     runs-on: ubuntu-latest
     if: contains(github.event.issue.labels.*.name, 'review')
+    permissions:
+      issues: write
+      contents: read
+      repository-projects: write
     
     steps:
-      - name: Generate token
-        id: generate-token
-        uses: tibdex/github-app-token@v1
-        with:
-          app_id: ${{ secrets.PROJECT_APP_ID }}
-          private_key: ${{ secrets.PROJECT_APP_PRIVATE_KEY }}
-        continue-on-error: true
-
       - name: Add issue to project and set status
         env:
-          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token || secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ISSUE_ID: ${{ github.event.issue.node_id }}
           PROJECT_ID: "PVT_kwDOCiL9As4BPPwG"
           STATUS_FIELD_ID: "PVTSSF_lADOCiL9As4BPPwGzg9teFM"
