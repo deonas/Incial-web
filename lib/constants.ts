@@ -10,8 +10,8 @@ export const greetings = [
 export const navLinks = [
   { label: "Home", href: "/" },
   { label: "About Us", href: "/about" },
-  { label: "Products", href: "/#products" },
-  { label: "Case Study", href: "/#case-study" },
+  { label: "Products", href: "/products" },
+  { label: "Case Study", href: "/case-studies" },
   { label: "Services", href: "/#services" },
   { label: "Careers", href: "/careers" },
   { label: "Blogs", href: "/blogs" },
