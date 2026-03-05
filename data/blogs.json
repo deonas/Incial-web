@@ -1,0 +1,18 @@
+{
+  "popularPosts": [
+    { "id": 1, "slug": "popular-1", "title": "A Complete Guide to Mobile App Development", "author": "Anjali", "mins": 12, "date": "December 09, 2025", "image": "/images/case1.jpg", "category": "popular" },
+    { "id": 2, "slug": "popular-2", "title": "A Complete Guide to Mobile App Development", "author": "Anjali", "mins": 12, "date": "December 09, 2025", "image": "/images/case1.jpg", "category": "popular" },
+    { "id": 3, "slug": "popular-3", "title": "A Complete Guide to Mobile App Development", "author": "Anjali", "mins": 12, "date": "December 09, 2025", "image": "/images/case1.jpg", "category": "popular" }
+  ],
+  "newestPosts": [
+    { "id": 4, "slug": "newest-1", "title": "A Complete Guide to Mobile App Development", "author": "Arijit", "mins": 12, "date": "December 03, 2026", "image": "/images/case1.jpg", "category": "newest" },
+    { "id": 5, "slug": "newest-2", "title": "A Complete Guide to Mobile App Development", "author": "Arjun", "mins": 10, "date": "December 08, 2026", "image": "/images/case1.jpg", "category": "newest" },
+    { "id": 6, "slug": "newest-3", "title": "A Complete Guide to Mobile App Development", "author": "Aditi", "mins": 6, "date": "December 03, 2026", "image": "/images/case1.jpg", "category": "newest" },
+    { "id": 7, "slug": "newest-4", "title": "A Complete Guide to Mobile App Development", "author": "Arijit", "mins": 8, "date": "December 03, 2026", "image": "/images/case1.jpg", "category": "newest" },
+    { "id": 8, "slug": "newest-5", "title": "A Complete Guide to Mobile App Development", "author": "Arjun", "mins": 11, "date": "December 08, 2026", "image": "/images/case1.jpg", "category": "newest" },
+    { "id": 9, "slug": "newest-6", "title": "A Complete Guide to Mobile App Development", "author": "Aditi", "mins": 7, "date": "December 03, 2026", "image": "/images/case1.jpg", "category": "newest" },
+    { "id": 10, "slug": "newest-7", "title": "A Complete Guide to Mobile App Development", "author": "Arijit", "mins": 9, "date": "December 03, 2026", "image": "/images/case1.jpg", "category": "newest" },
+    { "id": 11, "slug": "newest-8", "title": "A Complete Guide to Mobile App Development", "author": "Arjun", "mins": 14, "date": "December 08, 2026", "image": "/images/case1.jpg", "category": "newest" },
+    { "id": 12, "slug": "newest-9", "title": "A Complete Guide to Mobile App Development", "author": "Aditi", "mins": 5, "date": "December 03, 2026", "image": "/images/case1.jpg", "category": "newest" }
+  ]
+}

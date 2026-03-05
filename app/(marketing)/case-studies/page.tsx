@@ -66,103 +66,120 @@ export default function CaseStudiesPage() {
   };
 
   return (
-    <div className="relative min-h-screen bg-black text-white">
+    <div className="relative min-h-screen bg-white">
       {/* Header */}
       <Header menuOpen={menuOpen} onToggleMenu={handleToggleMenu} />
 
-      {/* Main Content */}
-      <main className="pt-32 pb-20">
-        {/* Breadcrumb */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="mb-10 flex items-center gap-2 text-sm px-6 md:px-16 lg:px-24 xl:px-32 max-w-[1400px] mx-auto"
-        >
-          <a href="/" className="text-blue-500 hover:text-blue-400 transition-colors">
-            Home
-          </a>
-          <span className="text-gray-500">›</span>
-          <span className="text-gray-400">Work</span>
-        </motion.div>
-
-        {/* Hero Section with Image - Full Width */}
-        <motion.section
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="mb-16 relative px-4 md:px-8 lg:px-12"
-        >
-          {/* Hero Image with overlay text */}
-          <div className="relative w-full h-[350px] md:h-[450px] lg:h-[500px] rounded-2xl overflow-hidden mb-12 max-w-[1600px] mx-auto">
-            <Image
-              src="/images/case1.jpg"
-              alt="Case Study Hero"
-              fill
-              className="object-cover"
-              priority
-            />
-            <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white">
-                Case Study
-              </h1>
-            </div>
-          </div>
-
-          {/* Description */}
-          <p className="text-gray-400 text-sm md:text-base max-w-3xl mx-auto text-center leading-relaxed italic">
-            At Incial, we pride ourselves on developing tailored digital solutions that make a real impact. Here's a glimpse of some of the projects we've brought to life across various industries:
-          </p>
-        </motion.section>
-
-        {/* Case Studies List */}
-        <div className="space-y-16 mt-20 px-6 md:px-16 lg:px-24 xl:px-32 max-w-[1400px] mx-auto">
-          {caseStudies.map((study, index) => (
-            <motion.article
-              key={study.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.6, delay: index * 0.05 }}
-              className="group relative border-b border-white/10 pb-16 last:border-b-0"
+      <motion.div
+        animate={{
+          y: menuOpen ? 100 : 0,
+          scale: menuOpen ? 0.95 : 1,
+          borderTopLeftRadius: menuOpen ? 24 : 0,
+          borderTopRightRadius: menuOpen ? 24 : 0,
+        }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        className="relative origin-top overflow-hidden bg-black text-white min-h-screen"
+        style={{ zIndex: 30 }}
+      >
+        {/* Main Content */}
+        <main className="pt-32 pb-20">
+          {/* Breadcrumb */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="mb-10 flex items-center gap-2 text-sm px-6 md:px-16 lg:px-24 xl:px-32 max-w-[1400px] mx-auto"
+          >
+            <a
+              href="/"
+              className="text-blue-500 hover:text-blue-400 transition-colors"
             >
-              <Link href={`/case-studies/${study.slug}`} className="block">
-                <div className="flex flex-col md:flex-row gap-8 md:gap-10 items-start">
-                  {/* Image */}
-                  <div className="w-full md:w-[380px] lg:w-[420px] flex-shrink-0 overflow-hidden rounded-xl">
-                    <div className="relative aspect-[420/240] w-full">
-                      <Image
-                        src="/images/case1.jpg"
-                        alt={study.title}
-                        fill
-                        className="object-cover grayscale brightness-75 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-500"
-                      />
-                    </div>
-                  </div>
+              Home
+            </a>
+            <span className="text-gray-500">›</span>
+            <span className="text-gray-400">Work</span>
+          </motion.div>
 
-                  {/* Content */}
-                  <div className="flex-1 pt-2">
-                    <div className="text-[11px] text-gray-500 uppercase tracking-widest mb-3 font-light">
-                      {study.category}
+          {/* Hero Section with Image - Full Width */}
+          <motion.section
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="mb-16 relative px-4 md:px-8 lg:px-12"
+          >
+            {/* Hero Image with overlay text */}
+            <div className="relative w-full h-[350px] md:h-[450px] lg:h-[500px] rounded-2xl overflow-hidden mb-12 max-w-[1600px] mx-auto">
+              <Image
+                src="/images/case1.webp"
+                alt="Case Study Hero"
+                fill
+                className="object-cover"
+                priority
+              />
+              <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white">
+                  Case Study
+                </h1>
+              </div>
+            </div>
+
+            {/* Description */}
+            <p className="text-gray-400 text-sm md:text-base max-w-3xl mx-auto text-center leading-relaxed italic">
+              At Incial, we pride ourselves on developing tailored digital
+              solutions that make a real impact. Here's a glimpse of some of the
+              projects we've brought to life across various industries:
+            </p>
+          </motion.section>
+
+          {/* Case Studies List */}
+          <div className="space-y-16 mt-20 px-6 md:px-16 lg:px-24 xl:px-32 max-w-[1400px] mx-auto">
+            {caseStudies.map((study, index) => (
+              <motion.article
+                key={study.id}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.6, delay: index * 0.05 }}
+                className="group relative border-b border-white/10 pb-16 last:border-b-0"
+              >
+                <Link href={`/case-studies/${study.slug}`} className="block">
+                  <div className="flex flex-col md:flex-row gap-8 md:gap-10 items-start">
+                    {/* Image */}
+                    <div className="w-full md:w-[380px] lg:w-[420px] flex-shrink-0 overflow-hidden rounded-xl">
+                      <div className="relative aspect-[420/240] w-full">
+                        <Image
+                          src="/images/case1.webp"
+                          alt={study.title}
+                          fill
+                          className="object-cover grayscale brightness-75 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-500"
+                        />
+                      </div>
                     </div>
-                    <h2 className="text-xl md:text-2xl lg:text-[28px] font-semibold mb-4 leading-tight group-hover:text-blue-400 transition-colors">
-                      {study.title}
-                    </h2>
-                    <p className="text-gray-400 leading-relaxed text-[15px] md:text-base">
-                      "{study.description}"
-                    </p>
+
+                    {/* Content */}
+                    <div className="flex-1 pt-2">
+                      <div className="text-[11px] text-gray-500 uppercase tracking-widest mb-3 font-light">
+                        {study.category}
+                      </div>
+                      <h2 className="text-xl md:text-2xl lg:text-[28px] font-semibold mb-4 leading-tight group-hover:text-blue-400 transition-colors">
+                        {study.title}
+                      </h2>
+                      <p className="text-gray-400 leading-relaxed text-[15px] md:text-base">
+                        "{study.description}"
+                      </p>
+                    </div>
                   </div>
-                </div>
-              </Link>
-            </motion.article>
-          ))}
+                </Link>
+              </motion.article>
+            ))}
+          </div>
+        </main>
+
+        {/* Footer */}
+        <div className="px-6 md:px-16 lg:px-24 xl:px-32 max-w-[1400px] mx-auto mt-20">
+          <Footer />
         </div>
-      </main>
-
-      {/* Footer */}
-      <div className="px-6 md:px-16 lg:px-24 xl:px-32 max-w-[1400px] mx-auto mt-20">
-        <Footer />
-      </div>
+      </motion.div>
     </div>
   );
 }

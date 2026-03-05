@@ -1,0 +1,177 @@
+{
+  "headerText": "Some of Our Awesome Clients:",
+  "clients": [
+    {
+      "id": "precon",
+      "name": "Precon",
+      "src": "/clients/precon.png"
+    },
+    {
+      "id": "dc-kottayam",
+      "name": "DC Kottayam",
+      "src": "/clients/dc-kottayam.png"
+    },
+    {
+      "id": "usi3dt",
+      "name": "USI3DT",
+      "src": "/clients/usi3dt.png"
+    },
+    {
+      "id": "blaupunkt",
+      "name": "Blaupunkt",
+      "src": "/clients/blaupunkt.png"
+    },
+    {
+      "id": "voltant",
+      "name": "Voltant Energy",
+      "src": "/clients/voltant.png"
+    },
+    {
+      "id": "datalabs",
+      "name": "DataLabs",
+      "src": "/clients/datalabs.png"
+    },
+    {
+      "id": "livelong",
+      "name": "LiveLong Wealth",
+      "src": "/clients/livelong.png"
+    },
+    {
+      "id": "dream",
+      "name": "Dream",
+      "src": "/clients/dream.png"
+    },
+    {
+      "id": "ajce",
+      "name": "AJCE",
+      "src": "/clients/ajce.png"
+    },
+    {
+      "id": "vic",
+      "name": "VIC",
+      "src": "/clients/vic.png"
+    },
+    {
+      "id": "apj-paramedicals",
+      "name": "APJ Paramedicals",
+      "src": "/clients/apj-paramedicals.png"
+    },
+    {
+      "id": "cognilearn",
+      "name": "CogniLearn",
+      "src": "/clients/cognilearn.png"
+    },
+    {
+      "id": "coinco",
+      "name": "Coinco",
+      "src": "/clients/coinco.png"
+    },
+    {
+      "id": "jaybees",
+      "name": "Jaybees",
+      "src": "/clients/jaybees.png"
+    },
+    {
+      "id": "eden-public-school",
+      "name": "Eden Public School",
+      "src": "/clients/eden-public-school.png"
+    },
+    {
+      "id": "esla-spices",
+      "name": "Esla Spices",
+      "src": "/clients/esla-spices.png"
+    },
+    {
+      "id": "eutropics",
+      "name": "Eutropics",
+      "src": "/clients/eutropics.png"
+    },
+    {
+      "id": "elavanal",
+      "name": "Elavanal",
+      "src": "/clients/elavanal.png"
+    },
+    {
+      "id": "fotoloom",
+      "name": "Fotoloom",
+      "src": "/clients/fotoloom.png"
+    },
+    {
+      "id": "funfee",
+      "name": "Funfee",
+      "src": "/clients/funfee.png"
+    },
+    {
+      "id": "homescapes",
+      "name": "Homescapes",
+      "src": "/clients/homescapes.png"
+    },
+    {
+      "id": "intern-hub",
+      "name": "Intern Hub",
+      "src": "/clients/intern-hub.png"
+    },
+    {
+      "id": "zaburb",
+      "name": "Zaburb",
+      "src": "/clients/zaburb.png"
+    },
+    {
+      "id": "logo2",
+      "name": "Logo2",
+      "src": "/clients/logo2.png"
+    },
+    {
+      "id": "manna",
+      "name": "Manna Caterers",
+      "src": "/clients/manna.png"
+    },
+    {
+      "id": "meowendi",
+      "name": "Meowendi",
+      "src": "/clients/meowendi.png"
+    },
+    {
+      "id": "miraco",
+      "name": "MIRACO",
+      "src": "/clients/miraco.png"
+    },
+    {
+      "id": "skinzone",
+      "name": "Skinzone",
+      "src": "/clients/skinzone.png"
+    },
+    {
+      "id": "untitled1",
+      "name": "Client",
+      "src": "/clients/untitled1.png"
+    },
+    {
+      "id": "livelong-pala",
+      "name": "LiveLong Pala",
+      "src": "/clients/livelong-pala.png"
+    },
+    {
+      "id": "varkitchen",
+      "name": "Varkitchen",
+      "src": "/clients/varkitchen.png"
+    },
+    {
+      "id": "1772728901003",
+      "name": "jaybees",
+      "src": "/clients/jaybees.png"
+    }
+  ],
+  "testimonials": [
+    {
+      "id": "1",
+      "quote": "Founded in 2024 in Kanjirappally, Kerala, we started as a small team of passionate creators and strategists determined to make a difference.",
+      "author": "Client Name"
+    },
+    {
+      "id": "2",
+      "quote": "Founded in 2024 in Kanjirappally, Kerala, we started as a small team of passionate creators and strategists determined to make a difference.",
+      "author": "Client Name"
+    }
+  ]
+}

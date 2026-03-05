@@ -4,6 +4,7 @@ import { useRef, useState, useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 import { rotatingWords } from "@/lib/constants";
 
+// Components
 import RotatingText from "@/components/features/home/RotatingText";
 import LogoScreen from "@/components/features/home/LogoScreen";
 import BackgroundCircle from "@/components/features/home/BackgroundCircle";

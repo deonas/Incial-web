@@ -1,0 +1,40 @@
+{
+  "introTitle": "Services That Make Magic Happen",
+  "introSubtitle": "(And Seriously Grow Your Business)",
+  "branding": {
+    "headline": "Branding",
+    "subheadline": "that makes you unforgettable",
+    "description": "We craft brands that resonate — from visual identity to brand voice. Strategy, design, and storytelling united.",
+    "services": [
+      "Brand Strategy",
+      "Visual Identity",
+      "Logo Design",
+      "Brand Guidelines",
+      "Copywriting"
+    ]
+  },
+  "technology": {
+    "headline": "Technology",
+    "subheadline": "that scales with your ambition",
+    "description": "Cutting-edge web and app development. We engineer digital products that perform beautifully.",
+    "services": [
+      "Web Development",
+      "Mobile Apps",
+      "UI/UX Design",
+      "E-Commerce",
+      "API Integrations"
+    ]
+  },
+  "experience": {
+    "headline": "Experience",
+    "subheadline": "that keeps audiences coming back",
+    "description": "Digital marketing and content that converts. We combine data with creativity to drive real growth.",
+    "services": [
+      "Social Media",
+      "SEO & SEM",
+      "Content Strategy",
+      "Video Production",
+      "Analytics"
+    ]
+  }
+}

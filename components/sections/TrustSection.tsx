@@ -1,11 +1,18 @@
-import { useEffect } from "react";
+"use client";
+
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
-const stats = [
-  { value: "50+", label: "Happy Clients" },
-  { value: "10+", label: "Projects Completed" },
-  { value: "5", label: "Customer Ratings" },
-];
+interface Stat {
+  id: string;
+  value: string;
+  label: string;
+}
+
+interface TrustApiData {
+  title: string;
+  stats: Stat[];
+}
 
 interface TrustSectionProps {
   onBack?: () => void;
@@ -16,6 +23,24 @@ export default function TrustSection({
   onBack,
   onComplete,
 }: TrustSectionProps) {
+  const [stats, setStats] = useState<Stat[]>([]);
+  const [title, setTitle] = useState("Why Trust Incial?");
+
+  useEffect(() => {
+    fetch("/api/admin/trust")
+      .then((r) => r.json())
+      .then((d: TrustApiData) => {
+        setStats(d.stats || []);
+        if (d.title) setTitle(d.title);
+      })
+      .catch(() => {
+        setStats([
+          { id: "1", value: "60+", label: "Happy Clients" },
+          { id: "2", value: "80+", label: "Projects Completed" },
+        ]);
+      });
+  }, []);
+
   useEffect(() => {
     let isScrolling = false;
     const handleScroll = (e: WheelEvent) => {
@@ -78,10 +103,7 @@ export default function TrustSection({
           {/* Title */}
           <div className="text-center mb-24 md:mb-32">
             <h2 className="text-5xl md:text-7xl font-light tracking-tight italic text-white">
-              Why Trust{" "}
-              <span className="font-bold text-[#5ba4e6] not-italic">
-                Incial?
-              </span>
+              {title}
             </h2>
           </div>
 

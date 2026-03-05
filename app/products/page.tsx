@@ -38,14 +38,31 @@ const products = [
 // ── Arrow icon ─────────────────────────────────────────────────────────────
 function ArrowRight() {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="w-3.5 h-3.5"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth={2}
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M17 8l4 4m0 0l-4 4m4-4H3"
+      />
     </svg>
   );
 }
 
 // ── Product Section ────────────────────────────────────────────────────────
-function ProductSection({ product, index }: { product: typeof products[0]; index: number }) {
+function ProductSection({
+  product,
+  index,
+}: {
+  product: (typeof products)[0];
+  index: number;
+}) {
   return (
     <motion.section
       initial={{ opacity: 0, y: 40 }}
@@ -116,87 +133,104 @@ export default function ProductsPage() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <div className="relative min-h-screen bg-black text-white">
+    <div className="relative min-h-screen bg-white">
       <Header menuOpen={menuOpen} onToggleMenu={() => setMenuOpen(!menuOpen)} />
 
-      <main className="pt-24 pb-20">
+      <motion.div
+        animate={{
+          y: menuOpen ? 100 : 0,
+          scale: menuOpen ? 0.95 : 1,
+          borderTopLeftRadius: menuOpen ? 24 : 0,
+          borderTopRightRadius: menuOpen ? 24 : 0,
+        }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        className="relative origin-top overflow-hidden bg-black text-white min-h-screen"
+        style={{ zIndex: 30 }}
+      >
+        <main className="pt-24 pb-20">
+          {/* ── Hero ─────────────────────────────────────────────────────── */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-20 px-6"
+          >
+            <h1 className="text-3xl md:text-4xl font-bold italic mb-3">
+              Products
+            </h1>
+            <p className="text-[14px] text-gray-400 italic">
+              Built to work. Built to scale. Built for real businesses.
+            </p>
+          </motion.div>
 
-        {/* ── Hero ─────────────────────────────────────────────────────── */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-20 px-6"
-        >
-          <h1 className="text-3xl md:text-4xl font-bold italic mb-3">
-            Products
-          </h1>
-          <p className="text-[14px] text-gray-400 italic">
-            Built to work. Built to scale. Built for real businesses.
-          </p>
-        </motion.div>
+          {/*
+            ── Products container
+            Figma: left 149px, width 1141px → max-w-[1141px] with px matching left offset
+            gap: 150px between products
+          */}
+          <div
+            className="mx-auto w-full px-6 md:px-[149px]"
+            style={{ maxWidth: "1439px" }}
+          >
+            <div className="flex flex-col" style={{ gap: "150px" }}>
+              {products.map((product, i) => (
+                <ProductSection key={product.id} product={product} index={i} />
+              ))}
+            </div>
 
-        {/*
-          ── Products container
-          Figma: left 149px, width 1141px → max-w-[1141px] with px matching left offset
-          gap: 150px between products
-        */}
+            {/* ── Coming soon ────────────────────────────────────────────── */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="text-center pt-[100px] pb-16 flex flex-col items-center"
+              style={{ gap: "54px" }}
+            >
+              <h3
+                className="text-white"
+                style={{
+                  fontFamily: "var(--font-poppins)",
+                  fontWeight: 600,
+                  fontStyle: "normal",
+                  fontSize: "20px",
+                  lineHeight: "100%",
+                  letterSpacing: 0,
+                  textAlign: "center",
+                }}
+              >
+                Built by Incial. Designed for real businesses. More coming soon.
+              </h3>
+              <p
+                className="text-white max-w-[1141px]"
+                style={{
+                  fontFamily: "var(--font-poppins)",
+                  fontWeight: 400,
+                  fontStyle: "italic",
+                  fontSize: "16px",
+                  lineHeight: "1.6",
+                  letterSpacing: 0,
+                  textAlign: "center",
+                }}
+              >
+                WorkHub and StockFlow are just the beginning. We are actively
+                building more solutions focused on automation, operations,
+                analytics, and business growth. All upcoming products follow the
+                same philosophy — simple, practical, and customisable for real
+                business needs.
+              </p>
+            </motion.div>
+          </div>
+        </main>
+
+        {/* ── Footer ─────────────────────────────────────────────────────── */}
         <div
           className="mx-auto w-full px-6 md:px-[149px]"
           style={{ maxWidth: "1439px" }}
         >
-          <div className="flex flex-col" style={{ gap: "150px" }}>
-            {products.map((product, i) => (
-              <ProductSection key={product.id} product={product} index={i} />
-            ))}
-          </div>
-
-          {/* ── Coming soon ────────────────────────────────────────────── */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center pt-[100px] pb-16 flex flex-col items-center"
-            style={{ gap: "54px" }}
-          >
-            <h3
-              className="text-white"
-              style={{
-                fontFamily: "var(--font-poppins)",
-                fontWeight: 600,
-                fontStyle: "normal",
-                fontSize: "20px",
-                lineHeight: "100%",
-                letterSpacing: 0,
-                textAlign: "center",
-              }}
-            >
-              Built by Incial. Designed for real businesses. More coming soon.
-            </h3>
-            <p
-              className="text-white max-w-[1141px]"
-              style={{
-                fontFamily: "var(--font-poppins)",
-                fontWeight: 400,
-                fontStyle: "italic",
-                fontSize: "16px",
-                lineHeight: "1.6",
-                letterSpacing: 0,
-                textAlign: "center",
-              }}
-            >
-              WorkHub and StockFlow are just the beginning. We are actively building more solutions focused on automation, operations, analytics, and business growth. All upcoming products follow the same philosophy — simple, practical, and customisable for real business needs.
-            </p>
-          </motion.div>
+          <Footer />
         </div>
-
-      </main>
-
-      {/* ── Footer ─────────────────────────────────────────────────────── */}
-      <div className="mx-auto w-full px-6 md:px-[149px]" style={{ maxWidth: "1439px" }}>
-        <Footer />
-      </div>
+      </motion.div>
     </div>
   );
 }

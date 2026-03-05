@@ -25,3 +25,9 @@ body {
   background: var(--background);
   color: var(--foreground);
 }
+
+/* ── Custom cursor: hide the native cursor everywhere ── */
+* {
+  cursor: none !important;
+}
+

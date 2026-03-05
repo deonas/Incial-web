@@ -1,0 +1,15 @@
+{
+  "title": "Why Trust Incial?",
+  "stats": [
+    {
+      "id": "1",
+      "value": "60+",
+      "label": "Happy Clients"
+    },
+    {
+      "id": "2",
+      "value": "100+",
+      "label": "Projects Completed"
+    }
+  ]
+}

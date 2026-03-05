@@ -1,255 +1,438 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { motion, useInView } from "framer-motion";
-import { FaAward, FaMedal } from "react-icons/fa";
+import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
+import Footer from "@/components/layout/Footer";
+
+import Image from "next/image";
+
+// ── Local Asset URLs ──────────
+const imgHeroBanner = "/images/about/Team-Photo.JPG";
+const imgBrand = "/images/about/imgBrand.png";
+const imgImpact = "/images/about/imgImpact.png";
+const imgAwardsIcon = "/images/about/imgAwardsIcon.svg";
+
+// ── Fade-up animation variant ─────────────────────────────────────────────
+const fadeUp = {
+  hidden: { opacity: 0, y: 28 },
+  visible: (delay = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.7,
+      ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
+      delay,
+    },
+  }),
+};
+
+import { AboutData } from "@/lib/dataLoader";
 
 interface AboutSectionProps {
   onBack?: () => void;
   onComplete?: () => void;
 }
 
-const teamMembers = [
-  {
-    name: "Judy Hopps",
-    role: "CEO",
-    img: "https://placehold.co/150x150/333/FFF?text=JH",
-  },
-  {
-    name: "Mike Shinoda",
-    role: "CTO",
-    img: "https://placehold.co/150x150/333/FFF?text=MS",
-  },
-  {
-    name: "Gwen Stacy",
-    role: "CFO",
-    img: "https://placehold.co/150x150/333/FFF?text=GS",
-  },
-  {
-    name: "Mike Shinoda",
-    role: "COO",
-    img: "https://placehold.co/150x150/333/FFF?text=MS",
-  },
-  {
-    name: "Gwen Stacy",
-    role: "CMO",
-    img: "https://placehold.co/150x150/333/FFF?text=GS",
-  },
-  {
-    name: "Judy Hopps",
-    role: "Lead Dev",
-    img: "https://placehold.co/150x150/333/FFF?text=JH",
-  },
-];
-
 export default function AboutSection({
   onBack,
   onComplete,
 }: AboutSectionProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  // We don't use useInView for navigation logic, we use raw scroll events on the container or window
-  // But since this is a "phase", it likely sits in a fixed container in page.tsx.
-  // Actually, in page.tsx, sections are usually 100vh.
-  // If AboutSection is long, it should be scrollable.
-  // But the previous sections were "scroll-jacked" single screens.
-  // If AboutSection is taller than 100vh, we need to handle its internal scroll.
-  // The parent `page.tsx` renders it in a motion.div.
-  // If use "overflow-y-auto" on the container, we can capture scroll events.
+  const [data, setData] = useState<AboutData | null>(null);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    message: "",
+  });
+
+  useEffect(() => {
+    fetch("/api/admin/about")
+      .then((res) => res.json())
+      .then(setData)
+      .catch(console.error);
+  }, []);
 
   useEffect(() => {
     const container = containerRef.current;
-    if (!container) return;
-
-    // Only add scroll listeners if navigation props are provided (i.e., in the home page flow)
-    if (!onBack && !onComplete) return;
+    if (!container || (!onBack && !onComplete)) return;
 
     const handleScroll = (e: WheelEvent) => {
       const { scrollTop, scrollHeight, clientHeight } = container;
       const isAtTop = scrollTop === 0;
       const isAtBottom = Math.abs(scrollHeight - clientHeight - scrollTop) < 5;
-
-      // Scrolling UP at top -> Go Back
       if (e.deltaY < 0 && isAtTop && onBack) {
-        e.preventDefault(); // Prevent bounce if needed
+        e.preventDefault();
         onBack();
       }
-
-      // Scrolling DOWN at bottom -> Go Next
       if (e.deltaY > 0 && isAtBottom && onComplete) {
         e.preventDefault();
         onComplete();
       }
     };
 
-    // For touch, simplified logic (swipe detection)
-
     container.addEventListener("wheel", handleScroll, { passive: false });
     return () => container.removeEventListener("wheel", handleScroll);
   }, [onBack, onComplete]);
 
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("Contact form submitted:", formData);
+  };
+
   return (
     <section
       ref={containerRef}
-      className="h-screen w-full bg-black text-white overflow-y-auto overflow-x-hidden relative scrollbar-hide"
+      className="w-full bg-black text-white overflow-y-auto overflow-x-hidden relative scrollbar-hide"
+      style={{ minHeight: "100vh" }}
     >
-      <div className="w-full max-w-7xl mx-auto px-6 md:px-12 py-24 flex flex-col gap-32">
-        {/* Hero Image */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="w-full h-[400px] md:h-[500px] rounded-3xl overflow-hidden grayscale relative"
-        >
-          <img
-            src="https://placehold.co/1200x600/222/FFF?text=Team+Photo"
-            alt="Team"
-            className="w-full h-full object-cover"
+      {/* ── Breadcrumb ───────────────────────────────────────────────── */}
+      <div className="flex items-center justify-center gap-2 pt-6 pb-2">
+        <span className="bg-[#05101e] text-[#49a8ff] text-[10px] font-[Poppins,sans-serif] px-3 py-1 rounded-full">
+          Home
+        </span>
+        <span className="text-[#49a8ff] text-[10px] rotate-90 inline-block">
+          ›
+        </span>
+        <span className="bg-[#05101e] text-[#49a8ff] text-[10px] font-[Poppins,sans-serif] px-3 py-1 rounded-full">
+          About Us
+        </span>
+      </div>
+
+      {/* ── Hero Banner ──────────────────────────────────────────────── */}
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={fadeUp}
+        custom={0}
+        className="mx-auto mt-4 mb-0 rounded-3xl overflow-hidden relative"
+        style={{ width: "calc(100% - 96px)", maxWidth: 1252, height: 675 }}
+      >
+        {data?.heroBanner ? (
+          <Image
+            src={data.heroBanner}
+            alt="Incial team"
+            fill
+            priority
+            sizes="(max-width: 1252px) 100vw, 1252px"
+            className="object-cover object-top"
           />
-        </motion.div>
+        ) : (
+          <Image
+            src={imgHeroBanner}
+            alt="Incial team"
+            fill
+            priority
+            sizes="(max-width: 1252px) 100vw, 1252px"
+            className="object-cover object-top"
+          />
+        )}
+      </motion.div>
 
-        {/* Story */}
+      {/* ── Our Story ────────────────────────────────────────────────── */}
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={fadeUp}
+        custom={0.1}
+        className="text-center px-6 pt-16 pb-12 max-w-4xl mx-auto"
+      >
+        <h2 className="font-[Poppins,sans-serif] font-bold text-[36px] text-white mb-6">
+          {data?.storyTitle || "Our Story"}
+        </h2>
+        <p className="font-[Poppins,sans-serif] italic text-[16px] text-white/80 leading-relaxed max-w-3xl mx-auto">
+          {data?.storyText ||
+            "Incial began with a simple vision: to empower brands, businesses, and ideas with innovative digital solutions that create lasting impact. Founded in 2024 in Kanjirappally, Kerala, we started as a small team of passionate creators and strategists determined to make a difference. From those first projects to now serving businesses across industries, our journey has been fueled by creativity, collaboration, and a relentless drive to push boundaries."}
+        </p>
+      </motion.div>
+
+      {/* ── Our Purpose (white card) ──────────────────────────────────── */}
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={fadeUp}
+        custom={0.15}
+        className="mx-auto bg-white text-black rounded-3xl px-20 py-16 mb-16 flex flex-col gap-8"
+        style={{ width: "calc(100% - 96px)", maxWidth: 1253 }}
+      >
+        <h2 className="font-[Poppins,sans-serif] font-bold text-[36px]">
+          {data?.purposeTitle || "Our Purpose"}
+        </h2>
+        <p className="font-[Poppins,sans-serif] italic text-[16px] leading-relaxed max-w-3xl">
+          {data?.purposeText ||
+            "Our purpose is clear: to build brands that resonate, businesses that grow, and beyond that, to innovate continuously. We align strategy with creativity, technology with human connection, and ideas with measurable results."}
+        </p>
+      </motion.div>
+
+      {/* ── Meet Our Team ────────────────────────────────────────────── */}
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={fadeUp}
+        custom={0.1}
+        className="text-center px-6 pt-4 pb-6"
+      >
+        <h2 className="font-[Poppins,sans-serif] font-bold text-[36px] text-white mb-5">
+          {data?.teamTitle || "Meet Our Team"}
+        </h2>
+        <p className="font-[Poppins,sans-serif] italic text-[16px] text-white/80 max-w-3xl mx-auto mb-12">
+          {data?.teamSubtitle ||
+            "Behind every project is a team of talented professionals — creatives, marketers, designers, and technologists — united by passion and expertise. Together, we bring ideas to life and transform challenges into opportunities."}
+        </p>
+      </motion.div>
+
+      <div
+        className="mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mb-24 px-6"
+        style={{ maxWidth: 900 }}
+      >
+        {(data?.teamMembers || []).map((member, i) => (
+          <TeamMemberCard
+            key={member.id || i}
+            member={member}
+            delay={i * 0.1}
+          />
+        ))}
+      </div>
+
+      {/* ── Awards & Recognitions ─────────────────────────────────────── */}
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={fadeUp}
+        custom={0.1}
+        className="text-center px-6 pb-6"
+      >
+        <h2 className="font-[Poppins,sans-serif] font-bold text-[36px] text-white mb-5">
+          {data?.awardsTitle || "Awards & Recognitions"}
+        </h2>
+        <p className="font-[Poppins,sans-serif] italic text-[16px] text-white/80 max-w-3xl mx-auto mb-14">
+          {data?.awardsSubtitle ||
+            "Over the years, Incial has been proud to receive industry awards and recognitions that celebrate our commitment to excellence, innovation, and client success. These honors inspire us to continuously raise the bar."}
+        </p>
+      </motion.div>
+
+      <div className="flex flex-col md:flex-row justify-center gap-12 md:gap-32 pb-24 px-6">
+        {(data?.awards || []).map((award, i) => (
+          <motion.div
+            key={award.id || i}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeUp}
+            custom={i * 0.1}
+            className="flex flex-col items-center text-center"
+          >
+            <Image
+              src={award.icon || imgAwardsIcon}
+              alt={award.name}
+              width={96}
+              height={96}
+              className="mb-4 opacity-90"
+            />
+            <h3 className="font-[Poppins,sans-serif] font-bold text-[24px] text-white">
+              {award.name}
+            </h3>
+            <p className="font-[Poppins,sans-serif] italic text-[16px] text-white/70 mt-1">
+              {award.description} <span className="text-[#65adef]">|</span>{" "}
+              {award.year}
+            </p>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* ── Our Brand + Our Impact (stacked image cards) ─────────────── */}
+      <div
+        className="mx-auto mb-16"
+        style={{ width: "calc(100% - 96px)", maxWidth: 1256 }}
+      >
+        {/* Brand */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial="hidden"
+          whileInView="visible"
           viewport={{ once: true }}
-          className="text-center max-w-3xl mx-auto"
+          variants={fadeUp}
+          custom={0}
+          className="relative h-[245px] rounded-tl-3xl rounded-tr-3xl overflow-hidden"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-8">Our Story</h2>
-          <p className="text-gray-400 text-lg leading-relaxed">
-            Founded in 2024 in Kanjirappally, Kerala, we started as a small team
-            of passionate creators and strategists determined to make a
-            difference. We believe in the power of design and technology to
-            transform businesses and lives.
-          </p>
-        </motion.div>
-
-        {/* Purpose */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          className="bg-white text-black rounded-3xl p-12 md:p-20 text-left"
-        >
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">Our Purpose</h2>
-          <p className="text-xl md:text-2xl font-light leading-relaxed">
-            We exist to create meaningful digital experiences that connect
-            people and brands. Our purpose is to innovate, inspire, and drive
-            growth for our partners through strategic design and cutting-edge
-            technology.
-          </p>
-        </motion.div>
-
-        {/* Team */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="text-center"
-        >
-          <h2 className="text-3xl md:text-4xl font-bold mb-16">
-            Meet Our Team
-          </h2>
-          <p className="text-gray-400 mb-12 max-w-2xl mx-auto">
-            The talented individuals behind our success. We are a diverse group
-            of thinkers, dreamers, and doers.
-          </p>
-
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-12 md:gap-20">
-            {teamMembers.map((member, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="flex flex-col items-center"
-              >
-                <div className="w-32 h-32 md:w-48 md:h-48 rounded-full overflow-hidden mb-6 grayscale hover:grayscale-0 transition-all duration-500">
-                  <img
-                    src={member.img}
-                    alt={member.name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <h3 className="text-xl font-bold">{member.name}</h3>
-                <p className="text-gray-500 text-sm">{member.role}</p>
-              </motion.div>
-            ))}
+          <Image
+            src={data?.brandImage || imgBrand}
+            alt="Our Brand"
+            fill
+            sizes="(max-width: 1256px) 100vw, 1256px"
+            className="object-cover object-center"
+          />
+          <div className="absolute inset-0 bg-black/50" />
+          <div className="absolute inset-0 flex flex-col justify-center px-14 gap-3">
+            <h3 className="font-[Poppins,sans-serif] font-bold text-[36px] text-white">
+              {data?.brandTitle || "Our Brand"}
+            </h3>
+            <p className="font-[Poppins,sans-serif] italic text-[16px] text-white/90 max-w-3xl leading-relaxed">
+              {data?.brandText ||
+                "At Incial, our brand echoes our values: authentic, innovative, and trusted. We believe in transparency, empathy, and delivering beyond expectations. Every interaction is a chance to build lasting relationships."}
+            </p>
           </div>
         </motion.div>
 
-        {/* Awards */}
+        {/* Impact */}
         <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
+          initial="hidden"
+          whileInView="visible"
           viewport={{ once: true }}
-          className="text-center"
+          variants={fadeUp}
+          custom={0.1}
+          className="relative h-[245px] rounded-bl-3xl rounded-br-3xl overflow-hidden"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-16">
-            Awards & Recognitions
-          </h2>
-          <div className="flex flex-col md:flex-row justify-center gap-16 md:gap-32">
-            <div className="flex flex-col items-center">
-              <FaAward className="text-6xl text-blue-500 mb-6" />
-              <h3 className="text-xl font-bold mb-2">
-                Awwwards - Site of the Day
-              </h3>
-              <p className="text-gray-500 text-sm">March 2024</p>
-            </div>
-            <div className="flex flex-col items-center">
-              <FaMedal className="text-6xl text-blue-500 mb-6" />
-              <h3 className="text-xl font-bold mb-2">Red Dot Design Award</h3>
-              <p className="text-gray-500 text-sm">December 2023</p>
-            </div>
+          <Image
+            src={data?.impactImage || imgImpact}
+            alt="Our Impact"
+            fill
+            sizes="(max-width: 1256px) 100vw, 1256px"
+            className="object-cover object-center"
+          />
+          <div className="absolute inset-0 bg-black/50" />
+          <div className="absolute inset-0 flex flex-col justify-center px-14 gap-3">
+            <h3 className="font-[Poppins,sans-serif] font-bold text-[36px] text-white">
+              {data?.impactTitle || "Our Impact"}
+            </h3>
+            <p className="font-[Poppins,sans-serif] italic text-[16px] text-white/90 max-w-3xl leading-relaxed">
+              {data?.impactText ||
+                "Every project is a story of growth, transformation, and measurable success. We take pride in helping clients achieve goals, enhance visibility, and create memorable digital experiences."}
+            </p>
           </div>
         </motion.div>
+      </div>
 
-        {/* Brand & Impact */}
-        <div className="grid grid-cols-1 md:grid-cols-1 gap-12 pb-24">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="relative h-[400px] rounded-3xl overflow-hidden bg-gray-900 group"
-          >
-            <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all z-10" />
-            <img
-              src="https://placehold.co/1200x600/111/FFF?text=Our+Brand"
-              className="absolute inset-0 w-full h-full object-cover"
-              alt="Brand"
-            />
-            <div className="absolute bottom-10 left-10 z-20">
-              <h3 className="text-3xl font-bold mb-4">Our Brand</h3>
-              <p className="text-gray-200 max-w-md">
-                Defining our identity through consistent visual language and
-                core values.
-              </p>
-            </div>
-          </motion.div>
+      {/* ── Contact ──────────────────────────────────────────────────── */}
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={fadeUp}
+        custom={0}
+        className="flex flex-col items-center text-center px-6 pt-8 pb-12"
+      >
+        <h2 className="font-[Poppins,sans-serif] font-bold italic text-[32px] text-white mb-3">
+          Have a question? Need a quote?
+        </h2>
+        <p className="font-[Poppins,sans-serif] text-[16px] text-white/70 mb-10">
+          We promise to reply within 24 hours, every time.
+        </p>
 
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="relative h-[400px] rounded-3xl overflow-hidden bg-gray-900 group"
-          >
-            <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all z-10" />
-            <img
-              src="https://placehold.co/1200x600/111/FFF?text=Our+Impact"
-              className="absolute inset-0 w-full h-full object-cover"
-              alt="Impact"
+        <form
+          onSubmit={handleSubmit}
+          className="w-full max-w-[606px] flex flex-col gap-4"
+        >
+          {/* Name */}
+          <div className="border border-[#1e1e1e] rounded-full h-[42px] flex items-center px-6">
+            <input
+              type="text"
+              name="name"
+              placeholder="Full Name"
+              value={formData.name}
+              onChange={handleChange}
+              className="w-full bg-transparent outline-none text-white placeholder-[#8e8e8e] text-[16px] font-[Inter,sans-serif]"
             />
-            <div className="absolute bottom-10 left-10 z-20">
-              <h3 className="text-3xl font-bold mb-4">Our Impact</h3>
-              <p className="text-gray-200 max-w-md">
-                Creating positive change in our community and industry through
-                sustainable practices.
-              </p>
-            </div>
-          </motion.div>
-        </div>
+          </div>
+          {/* Email */}
+          <div className="border border-[#1e1e1e] rounded-full h-[42px] flex items-center px-6">
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={formData.email}
+              onChange={handleChange}
+              className="w-full bg-transparent outline-none text-white placeholder-[#8e8e8e] text-[16px] font-[Inter,sans-serif]"
+            />
+          </div>
+          {/* Phone */}
+          <div className="border border-[#1e1e1e] rounded-full h-[42px] flex items-center px-6">
+            <input
+              type="tel"
+              name="phone"
+              placeholder="Phone"
+              value={formData.phone}
+              onChange={handleChange}
+              className="w-full bg-transparent outline-none text-white placeholder-[#8e8e8e] text-[16px] font-[Inter,sans-serif]"
+            />
+          </div>
+          {/* Message */}
+          <div className="border border-[#1e1e1e] rounded-3xl min-h-[140px] px-6 py-4 relative">
+            <textarea
+              name="message"
+              placeholder="Message"
+              rows={4}
+              value={formData.message}
+              onChange={handleChange}
+              className="w-full bg-transparent outline-none text-white placeholder-[#8e8e8e] resize-none mb-10 text-[16px] font-[Inter,sans-serif]"
+            />
+            <button
+              type="submit"
+              className="absolute bottom-4 right-4 bg-white text-black font-semibold text-[13px] font-[Inter,sans-serif] px-4 py-2 rounded-xl shadow-[0_0_50px_0_rgba(0,133,255,0.2)] hover:bg-gray-100 transition-colors"
+            >
+              Contact
+            </button>
+          </div>
+        </form>
+      </motion.div>
+
+      {/* ── Footer ───────────────────────────────────────────────────── */}
+      <div className="px-12 pb-6">
+        <Footer />
       </div>
     </section>
+  );
+}
+
+// ── Team member card sub-component ───────────────────────────────────────
+interface TeamMember {
+  name: string;
+  role: string;
+  img: string;
+  objectPos: string;
+}
+
+function TeamMemberCard({
+  member,
+  delay,
+}: {
+  member: TeamMember;
+  delay: number;
+}) {
+  return (
+    <motion.div
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true }}
+      variants={fadeUp}
+      custom={delay}
+      className="flex flex-col items-center text-center"
+    >
+      {/* Blue glow circle BG + avatar */}
+      <div className="relative w-[247px] h-[276px] mb-4 overflow-hidden rounded-[125px]">
+        <div className="absolute bottom-0 left-0 w-[247px] h-[247px] rounded-full bg-[#d5d5d5]" />
+        <Image
+          src={member.img}
+          alt={member.name}
+          fill
+          sizes="247px"
+          className="object-cover object-top grayscale hover:grayscale-0 transition-all duration-500"
+        />
+      </div>
+      <h3 className="font-[Poppins,sans-serif] font-bold text-[24px] text-white">
+        {member.name}
+      </h3>
+      <p className="font-[Poppins,sans-serif] italic text-[16px] text-white/70">
+        {member.role}
+      </p>
+    </motion.div>
   );
 }

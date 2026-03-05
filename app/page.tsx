@@ -4,13 +4,18 @@ import { useState, useEffect, useCallback } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { greetings } from "@/lib/constants";
 import { Header, NavMenu } from "@/components/layout";
-import {
-  GreetingsOverlay,
-  ScrollSection,
-  TrustSection,
-  ClientSection,
-  ContactSection,
-} from "@/components/sections";
+import { GreetingsOverlay, ScrollSection } from "@/components/sections";
+import dynamic from "next/dynamic";
+
+const TrustSection = dynamic(
+  () => import("@/components/sections/TrustSection"),
+);
+const ClientSection = dynamic(
+  () => import("@/components/sections/ClientSection"),
+);
+const ContactSection = dynamic(
+  () => import("@/components/sections/ContactSection"),
+);
 
 type Phase =
   | "greetings"

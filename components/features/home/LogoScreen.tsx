@@ -2,6 +2,7 @@
 
 import { motion, Variants } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import { FiArrowDown } from "react-icons/fi";
 
 interface LogoScreenProps {
@@ -37,9 +38,12 @@ export default function LogoScreen({ onNextClick }: LogoScreenProps) {
         transition={{ delay: 2.5 }}
         className="absolute left-[10%] hidden md:block"
       >
-        <button className="rounded-full border border-white/30 px-8 py-3 text-sm text-white transition hover:bg-white hover:text-black">
+        <Link
+          href="/about"
+          className="inline-block rounded-full border border-white/30 px-8 py-3 text-sm text-white transition hover:bg-white hover:text-black"
+        >
           About Us
-        </button>
+        </Link>
       </motion.div>
 
       {/* Center Logo Area */}

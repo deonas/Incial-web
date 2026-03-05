@@ -18,21 +18,117 @@ interface BlogPost {
 }
 
 const popularPosts: BlogPost[] = [
-  { id: 1, slug: "popular-1", title: "A Complete Guide to Mobile App Development", author: "Anjali", mins: 12, date: "December 09, 2025", image: "/images/case1.jpg" },
-  { id: 2, slug: "popular-2", title: "A Complete Guide to Mobile App Development", author: "Anjali", mins: 12, date: "December 09, 2025", image: "/images/case1.jpg" },
-  { id: 3, slug: "popular-3", title: "A Complete Guide to Mobile App Development", author: "Anjali", mins: 12, date: "December 09, 2025", image: "/images/case1.jpg" },
+  {
+    id: 1,
+    slug: "popular-1",
+    title: "A Complete Guide to Mobile App Development",
+    author: "Anjali",
+    mins: 12,
+    date: "December 09, 2025",
+    image: "/images/case1.webp",
+  },
+  {
+    id: 2,
+    slug: "popular-2",
+    title: "A Complete Guide to Mobile App Development",
+    author: "Anjali",
+    mins: 12,
+    date: "December 09, 2025",
+    image: "/images/case1.webp",
+  },
+  {
+    id: 3,
+    slug: "popular-3",
+    title: "A Complete Guide to Mobile App Development",
+    author: "Anjali",
+    mins: 12,
+    date: "December 09, 2025",
+    image: "/images/case1.webp",
+  },
 ];
 
 const newestPosts: BlogPost[] = [
-  { id: 4,  slug: "newest-1", title: "A Complete Guide to Mobile App Development", author: "Arijit", mins: 12, date: "December 03, 2026", image: "/images/case1.jpg" },
-  { id: 5,  slug: "newest-2", title: "A Complete Guide to Mobile App Development", author: "Arjun",  mins: 10, date: "December 08, 2026", image: "/images/case1.jpg" },
-  { id: 6,  slug: "newest-3", title: "A Complete Guide to Mobile App Development", author: "Aditi",  mins: 6,  date: "December 03, 2026", image: "/images/case1.jpg" },
-  { id: 7,  slug: "newest-4", title: "A Complete Guide to Mobile App Development", author: "Arijit", mins: 8,  date: "December 03, 2026", image: "/images/case1.jpg" },
-  { id: 8,  slug: "newest-5", title: "A Complete Guide to Mobile App Development", author: "Arjun",  mins: 11, date: "December 08, 2026", image: "/images/case1.jpg" },
-  { id: 9,  slug: "newest-6", title: "A Complete Guide to Mobile App Development", author: "Aditi",  mins: 7,  date: "December 03, 2026", image: "/images/case1.jpg" },
-  { id: 10, slug: "newest-7", title: "A Complete Guide to Mobile App Development", author: "Arijit", mins: 9,  date: "December 03, 2026", image: "/images/case1.jpg" },
-  { id: 11, slug: "newest-8", title: "A Complete Guide to Mobile App Development", author: "Arjun",  mins: 14, date: "December 08, 2026", image: "/images/case1.jpg" },
-  { id: 12, slug: "newest-9", title: "A Complete Guide to Mobile App Development", author: "Aditi",  mins: 5,  date: "December 03, 2026", image: "/images/case1.jpg" },
+  {
+    id: 4,
+    slug: "newest-1",
+    title: "A Complete Guide to Mobile App Development",
+    author: "Arijit",
+    mins: 12,
+    date: "December 03, 2026",
+    image: "/images/case1.webp",
+  },
+  {
+    id: 5,
+    slug: "newest-2",
+    title: "A Complete Guide to Mobile App Development",
+    author: "Arjun",
+    mins: 10,
+    date: "December 08, 2026",
+    image: "/images/case1.webp",
+  },
+  {
+    id: 6,
+    slug: "newest-3",
+    title: "A Complete Guide to Mobile App Development",
+    author: "Aditi",
+    mins: 6,
+    date: "December 03, 2026",
+    image: "/images/case1.webp",
+  },
+  {
+    id: 7,
+    slug: "newest-4",
+    title: "A Complete Guide to Mobile App Development",
+    author: "Arijit",
+    mins: 8,
+    date: "December 03, 2026",
+    image: "/images/case1.webp",
+  },
+  {
+    id: 8,
+    slug: "newest-5",
+    title: "A Complete Guide to Mobile App Development",
+    author: "Arjun",
+    mins: 11,
+    date: "December 08, 2026",
+    image: "/images/case1.webp",
+  },
+  {
+    id: 9,
+    slug: "newest-6",
+    title: "A Complete Guide to Mobile App Development",
+    author: "Aditi",
+    mins: 7,
+    date: "December 03, 2026",
+    image: "/images/case1.webp",
+  },
+  {
+    id: 10,
+    slug: "newest-7",
+    title: "A Complete Guide to Mobile App Development",
+    author: "Arijit",
+    mins: 9,
+    date: "December 03, 2026",
+    image: "/images/case1.webp",
+  },
+  {
+    id: 11,
+    slug: "newest-8",
+    title: "A Complete Guide to Mobile App Development",
+    author: "Arjun",
+    mins: 14,
+    date: "December 08, 2026",
+    image: "/images/case1.webp",
+  },
+  {
+    id: 12,
+    slug: "newest-9",
+    title: "A Complete Guide to Mobile App Development",
+    author: "Aditi",
+    mins: 5,
+    date: "December 03, 2026",
+    image: "/images/case1.webp",
+  },
 ];
 
 function BlogCard({ post, index }: { post: BlogPost; index: number }) {
@@ -46,7 +142,6 @@ function BlogCard({ post, index }: { post: BlogPost; index: number }) {
       <Link href={`/blogs/${post.slug}`} className="group block">
         {/* White card — Figma: radius 25px, padding 10px, gap 10px */}
         <div className="bg-white rounded-[25px] p-[10px] flex flex-col gap-[10px] shadow-sm group-hover:shadow-lg transition-shadow duration-300">
-
           {/* Image with overlay */}
           <div className="relative rounded-[18px] overflow-hidden aspect-[4/3] w-full">
             <Image
@@ -60,7 +155,9 @@ function BlogCard({ post, index }: { post: BlogPost; index: number }) {
               <h3 className="text-[15px] font-semibold leading-snug text-white mb-2 line-clamp-2">
                 {post.title}
               </h3>
-              <p className="text-[13px] text-white/70 font-light">By {post.author}</p>
+              <p className="text-[13px] text-white/70 font-light">
+                By {post.author}
+              </p>
             </div>
           </div>
 
@@ -70,7 +167,6 @@ function BlogCard({ post, index }: { post: BlogPost; index: number }) {
             <span className="text-gray-300">|</span>
             <span>{post.date}</span>
           </div>
-
         </div>
       </Link>
     </motion.div>
@@ -95,72 +191,85 @@ export default function BlogsPage() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <div className="relative min-h-screen bg-black text-white">
+    <div className="relative min-h-screen bg-white">
       <Header menuOpen={menuOpen} onToggleMenu={() => setMenuOpen(!menuOpen)} />
 
-      {/*
-        Figma spec:
-          container left: 90px → px-[90px]
-          container max-width: 1251px
-          grid column-gap: 60px → gap-x-[60px]
-          grid row-gap: 60px    → gap-y-[60px]
-      */}
-      <main className="pt-28 pb-24 pl-[90px] pr-[90px] max-w-[1431px] mx-auto">
+      <motion.div
+        animate={{
+          y: menuOpen ? 100 : 0,
+          scale: menuOpen ? 0.95 : 1,
+          borderTopLeftRadius: menuOpen ? 24 : 0,
+          borderTopRightRadius: menuOpen ? 24 : 0,
+        }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        className="relative origin-top overflow-hidden bg-black text-white min-h-screen"
+        style={{ zIndex: 30 }}
+      >
+        {/*
+          Figma spec:
+            container left: 90px → px-[90px]
+            container max-width: 1251px
+            grid column-gap: 60px → gap-x-[60px]
+            grid row-gap: 60px    → gap-y-[60px]
+        */}
+        <main className="pt-28 pb-24 pl-[90px] pr-[90px] max-w-[1431px] mx-auto">
+          {/* Breadcrumb */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="mb-8 flex items-center gap-2 text-sm"
+          >
+            <Link
+              href="/"
+              className="text-blue-500 hover:text-blue-400 transition-colors"
+            >
+              Home
+            </Link>
+            <span className="text-gray-500">›</span>
+            <span className="text-gray-400">Blogs</span>
+          </motion.div>
 
-        {/* Breadcrumb */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="mb-8 flex items-center gap-2 text-sm"
-        >
-          <Link href="/" className="text-blue-500 hover:text-blue-400 transition-colors">
-            Home
-          </Link>
-          <span className="text-gray-500">›</span>
-          <span className="text-gray-400">Blogs</span>
-        </motion.div>
+          {/* Page Title */}
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="text-4xl md:text-5xl font-bold text-center mb-14"
+          >
+            Blogs
+          </motion.h1>
 
-        {/* Page Title */}
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="text-4xl md:text-5xl font-bold text-center mb-14"
-        >
-          Blogs
-        </motion.h1>
+          {/* ── Popular ─────────────────────────────────────────────────────── */}
+          <section className="mb-16">
+            <SectionLabel label="Popular" />
+            {/* max-w-[1251px] grid with 60px gaps */}
+            <div className="max-w-[1251px] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-[60px] gap-y-[60px]">
+              {popularPosts.map((post, i) => (
+                <BlogCard key={post.id} post={post} index={i} />
+              ))}
+            </div>
+          </section>
 
-        {/* ── Popular ─────────────────────────────────────────────────────── */}
-        <section className="mb-16">
-          <SectionLabel label="Popular" />
-          {/* max-w-[1251px] grid with 60px gaps */}
-          <div className="max-w-[1251px] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-[60px] gap-y-[60px]">
-            {popularPosts.map((post, i) => (
-              <BlogCard key={post.id} post={post} index={i} />
-            ))}
-          </div>
-        </section>
+          {/* Divider */}
+          <div className="max-w-[1251px] border-t border-white/10 mb-16" />
 
-        {/* Divider */}
-        <div className="max-w-[1251px] border-t border-white/10 mb-16" />
+          {/* ── Newest ──────────────────────────────────────────────────────── */}
+          <section>
+            <SectionLabel label="Newest" delay={0.1} />
+            <div className="max-w-[1251px] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-[60px] gap-y-[60px]">
+              {newestPosts.map((post, i) => (
+                <BlogCard key={post.id} post={post} index={i} />
+              ))}
+            </div>
+          </section>
+        </main>
 
-        {/* ── Newest ──────────────────────────────────────────────────────── */}
-        <section>
-          <SectionLabel label="Newest" delay={0.1} />
-          <div className="max-w-[1251px] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-[60px] gap-y-[60px]">
-            {newestPosts.map((post, i) => (
-              <BlogCard key={post.id} post={post} index={i} />
-            ))}
-          </div>
-        </section>
-
-      </main>
-
-      {/* Footer */}
-      <div className="pl-[90px] pr-[90px] max-w-[1431px] mx-auto">
-        <Footer />
-      </div>
+        {/* Footer */}
+        <div className="pl-[90px] pr-[90px] max-w-[1431px] mx-auto">
+          <Footer />
+        </div>
+      </motion.div>
     </div>
   );
 }
