@@ -14,7 +14,7 @@ export default function TechnologySlide() {
               d="M 100,280 Q 500,450 900,280" // Slightly flatter than 500 to fit inside
               fill="transparent"
             />
-            <text className="text-[6rem] font-bold fill-white tracking-tight uppercase">
+            <text className="text-[6rem] font-bold fill-white tracking-tight">
               <textPath href="#techCurve" startOffset="50%" textAnchor="middle">
                 Technology
               </textPath>

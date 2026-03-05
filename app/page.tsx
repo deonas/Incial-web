@@ -6,7 +6,6 @@ import { greetings } from "@/lib/constants";
 import { Header, NavMenu } from "@/components/layout";
 import {
   GreetingsOverlay,
-  HeroSection,
   ScrollSection,
   TrustSection,
   ClientSection,
@@ -15,17 +14,37 @@ import {
 
 type Phase =
   | "greetings"
-  | "hero"
   | "scrolling"
   | "trust"
   | "client"
   | "about"
   | "contact";
 
+const sectionVariants = {
+  enter: (direction: number) => {
+    return {
+      y: direction > 0 ? "100vh" : "-100vh",
+      opacity: 0,
+    };
+  },
+  center: {
+    y: 0,
+    opacity: 1,
+  },
+  exit: (direction: number) => {
+    return {
+      y: direction < 0 ? "100vh" : "-100vh",
+      opacity: 0,
+    };
+  },
+};
+
 export default function Home() {
   const [phase, setPhase] = useState<Phase>("greetings");
+  const [direction, setDirection] = useState(1);
   const [greetingIndex, setGreetingIndex] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrollSectionStartAtEnd, setScrollSectionStartAtEnd] = useState(false);
 
   /* ── Greeting sequence ──────────────────────────── */
   useEffect(() => {
@@ -35,12 +54,14 @@ export default function Home() {
       const timer = setTimeout(() => setGreetingIndex((prev) => prev + 1), 500);
       return () => clearTimeout(timer);
     } else {
-      const timer = setTimeout(() => setPhase("hero"), 500);
+      const timer = setTimeout(() => {
+        setDirection(1);
+        setPhase("scrolling");
+      }, 500);
       return () => clearTimeout(timer);
     }
   }, [greetingIndex, phase]);
 
-  const handleStart = useCallback(() => setPhase("scrolling"), []);
   const handleToggleMenu = useCallback(() => setMenuOpen((prev) => !prev), []);
 
   return (
@@ -74,87 +95,90 @@ export default function Home() {
           className="relative origin-top overflow-hidden bg-black text-white"
           style={{ zIndex: 30 }}
         >
-          <AnimatePresence mode="wait">
-            {phase === "hero" && (
-              <motion.div
-                key="hero"
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                <HeroSection onStart={handleStart} />
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          <AnimatePresence>
+          <AnimatePresence mode="wait" custom={direction}>
             {phase === "scrolling" && (
               <motion.div
                 key="scroll"
-                initial={{ y: "100vh", opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ y: "-100vh", opacity: 0 }}
+                custom={direction}
+                variants={sectionVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
                 transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
               >
                 <ScrollSection
-                  initialServicesSlide={0}
+                  startAtEnd={scrollSectionStartAtEnd}
                   onScrollComplete={() => {
+                    setDirection(1);
                     setPhase("trust");
                   }}
                 />
               </motion.div>
             )}
-          </AnimatePresence>
 
-          <AnimatePresence>
             {phase === "trust" && (
               <motion.div
                 key="trust"
-                initial={{ y: "100vh", opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ y: "-100vh", opacity: 0 }}
+                custom={direction}
+                variants={sectionVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
                 transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
               >
                 <TrustSection
                   onBack={() => {
-                    // Since services is inside scrolling now,
-                    // we go back to scrolling phase.
-                    // The ScrollSection itself takes `initialServicesSlide = 3` internally to jump to the last slide
-                    // Let's modify phase handler for that if you want, but sticking to "scrolling" works
+                    setDirection(-1);
+                    setScrollSectionStartAtEnd(true);
                     setPhase("scrolling");
                   }}
-                  onComplete={() => setPhase("client")}
+                  onComplete={() => {
+                    setDirection(1);
+                    setPhase("client");
+                  }}
                 />
               </motion.div>
             )}
-          </AnimatePresence>
 
-          <AnimatePresence>
             {phase === "client" && (
               <motion.div
                 key="client"
-                initial={{ y: "100vh", opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ y: "-100vh", opacity: 0 }}
+                custom={direction}
+                variants={sectionVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
                 transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
               >
                 <ClientSection
-                  onBack={() => setPhase("trust")}
-                  onComplete={() => setPhase("contact")}
+                  onBack={() => {
+                    setDirection(-1);
+                    setPhase("trust");
+                  }}
+                  onComplete={() => {
+                    setDirection(1);
+                    setPhase("contact");
+                  }}
                 />
               </motion.div>
             )}
-          </AnimatePresence>
 
-          <AnimatePresence>
             {phase === "contact" && (
               <motion.div
                 key="contact"
-                initial={{ y: "100vh", opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ y: "100vh", opacity: 0 }}
+                custom={direction}
+                variants={sectionVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
                 transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
               >
-                <ContactSection onBack={() => setPhase("client")} />
+                <ContactSection
+                  onBack={() => {
+                    setDirection(-1);
+                    setPhase("client");
+                  }}
+                />
               </motion.div>
             )}
           </AnimatePresence>

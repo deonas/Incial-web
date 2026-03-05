@@ -4,7 +4,6 @@ import { useRef, useState, useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 import { rotatingWords } from "@/lib/constants";
 
-// Components
 import RotatingText from "@/components/features/home/RotatingText";
 import LogoScreen from "@/components/features/home/LogoScreen";
 import BackgroundCircle from "@/components/features/home/BackgroundCircle";
@@ -12,18 +11,38 @@ import ServicesSection from "@/components/sections/ServicesSection";
 
 interface ScrollSectionProps {
   onScrollComplete?: () => void;
-  initialServicesSlide?: number;
+  onBack?: () => void;
+  startAtEnd?: boolean;
 }
 
 export default function ScrollSection({
   onScrollComplete,
-  initialServicesSlide = 0,
+  onBack,
+  startAtEnd = false,
 }: ScrollSectionProps) {
-  const [wordIndex, setWordIndex] = useState(0);
-  const [showLogo, setShowLogo] = useState(false);
-  const [showServices, setShowServices] = useState(false);
+  const [wordIndex, setWordIndex] = useState(
+    startAtEnd ? rotatingWords.length - 1 : 0,
+  );
+  const [showLogo, setShowLogo] = useState(startAtEnd);
+  const [showServices, setShowServices] = useState(startAtEnd);
+
   const isScrolling = useRef(false);
   const circleRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Auto flow: keep advancing wordIndex until we reach the end, then showLogo.
+    // If startAtEnd is true, this won't run because showLogo is true or wordIndex is at max.
+    if (!showLogo && !showServices) {
+      const timer = setTimeout(() => {
+        if (wordIndex < rotatingWords.length - 1) {
+          setWordIndex((prev) => prev + 1);
+        } else {
+          setShowLogo(true);
+        }
+      }, 1500); // Increased from 700ms to 1500ms per word
+      return () => clearTimeout(timer);
+    }
+  }, [wordIndex, showLogo, showServices]);
 
   useEffect(() => {
     const handleScroll = (e: WheelEvent) => {
@@ -32,13 +51,7 @@ export default function ScrollSection({
       if (e.deltaY > 0) {
         // Scroll Down
         isScrolling.current = true;
-        if (!showLogo) {
-          if (wordIndex < rotatingWords.length - 1) {
-            setWordIndex((prev) => prev + 1);
-          } else {
-            setShowLogo(true);
-          }
-        } else if (!showServices) {
+        if (showLogo && !showServices) {
           setShowServices(true);
         }
         setTimeout(() => {
@@ -49,10 +62,11 @@ export default function ScrollSection({
         isScrolling.current = true;
         if (showServices) {
           // Handled by ServicesSection going back
-        } else if (showLogo) {
-          setShowLogo(false);
-        } else if (wordIndex > 0) {
-          setWordIndex((prev) => prev - 1);
+        } else if (showLogo && onBack) {
+          onBack();
+        } else if (!showLogo && onBack) {
+          // Allow backing out even while auto-animating
+          onBack();
         }
         setTimeout(() => {
           isScrolling.current = false;
@@ -66,6 +80,11 @@ export default function ScrollSection({
       touchStartY = e.touches[0].clientY;
     };
     const handleTouchMove = (e: TouchEvent) => {
+      // Prevent default scrolling when inside scroll section
+      if (typeof window !== "undefined" && window.scrollY === 0) {
+        e.preventDefault();
+      }
+
       if (isScrolling.current) return;
       const touchEndY = e.touches[0].clientY;
       const deltaY = touchStartY - touchEndY;
@@ -74,13 +93,7 @@ export default function ScrollSection({
         if (deltaY > 0) {
           // Swipe Up / Scroll Down
           isScrolling.current = true;
-          if (!showLogo) {
-            if (wordIndex < rotatingWords.length - 1) {
-              setWordIndex((prev) => prev + 1);
-            } else {
-              setShowLogo(true);
-            }
-          } else if (!showServices) {
+          if (showLogo && !showServices) {
             setShowServices(true);
           }
         } else {
@@ -88,10 +101,10 @@ export default function ScrollSection({
           isScrolling.current = true;
           if (showServices) {
             // Handled by ServicesSection
-          } else if (showLogo) {
-            setShowLogo(false);
-          } else if (wordIndex > 0) {
-            setWordIndex((prev) => prev - 1);
+          } else if (showLogo && onBack) {
+            onBack();
+          } else if (!showLogo && onBack) {
+            onBack();
           }
         }
         setTimeout(() => {
@@ -109,7 +122,7 @@ export default function ScrollSection({
       window.removeEventListener("touchstart", handleTouchStart);
       window.removeEventListener("touchmove", handleTouchMove);
     };
-  }, [wordIndex, showLogo, showServices]);
+  }, [showLogo, showServices, onBack]);
 
   return (
     <div className="relative h-screen w-full overflow-hidden bg-black">
@@ -119,7 +132,7 @@ export default function ScrollSection({
           <AnimatePresence mode="wait">
             {showServices ? (
               <ServicesSection
-                initialSlide={initialServicesSlide}
+                initialSlide={startAtEnd ? 3 : 0}
                 onComplete={onScrollComplete}
                 onBack={() => setShowServices(false)}
               />

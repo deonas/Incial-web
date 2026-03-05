@@ -3,6 +3,8 @@
 import { motion } from "framer-motion";
 import { RefObject } from "react";
 
+import RotatingEarth from "./RotatingEarth";
+
 interface BackgroundCircleProps {
   circleRef?: RefObject<HTMLDivElement | null>;
   wordIndex: number;
@@ -36,10 +38,7 @@ export default function BackgroundCircle({
         height: "min(1000px, 90vw)",
       }}
     >
-      <div
-        className="h-full w-full rounded-full"
-        style={{ border: "1px solid rgba(100, 130, 200, 0.35)" }}
-      />
+      <RotatingEarth className="w-full h-full" width={1000} height={1000} />
     </motion.div>
   );
 }
