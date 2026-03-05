@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { motion } from "framer-motion";
-import ClientMarquee from "@/components/ui/ClientMarquee";
 
 const stats = [
   { value: "50+", label: "Happy Clients" },
@@ -17,31 +16,19 @@ export default function TrustSection({
   onBack,
   onComplete,
 }: TrustSectionProps) {
-  const [view, setView] = useState<"stats" | "testimonials">("stats");
-
-  const handleUp = () => {
-    if (view === "testimonials") {
-      setView("stats");
-    } else if (onBack) {
-      onBack();
-    }
-  };
-
-  const handleDown = () => {
-    if (view === "stats") {
-      setView("testimonials");
-    } else if (onComplete) {
-      onComplete();
-    }
-  };
-
   useEffect(() => {
+    let isScrolling = false;
     const handleScroll = (e: WheelEvent) => {
+      if (isScrolling) return;
+      isScrolling = true;
       if (e.deltaY > 0) {
-        handleDown();
+        if (onComplete) onComplete();
       } else {
-        handleUp();
+        if (onBack) onBack();
       }
+      setTimeout(() => {
+        isScrolling = false;
+      }, 500);
     };
 
     let touchStartY = 0;
@@ -49,13 +36,22 @@ export default function TrustSection({
       touchStartY = e.touches[0].clientY;
     };
     const handleTouchMove = (e: TouchEvent) => {
+      if (isScrolling) return;
       const touchEndY = e.touches[0].clientY;
       const deltaY = touchStartY - touchEndY;
 
       if (deltaY > 50) {
-        handleDown();
+        isScrolling = true;
+        if (onComplete) onComplete();
+        setTimeout(() => {
+          isScrolling = false;
+        }, 500);
       } else if (deltaY < -50) {
-        handleUp();
+        isScrolling = true;
+        if (onBack) onBack();
+        setTimeout(() => {
+          isScrolling = false;
+        }, 500);
       }
     };
 
@@ -68,34 +64,32 @@ export default function TrustSection({
       window.removeEventListener("touchstart", handleTouchStart);
       window.removeEventListener("touchmove", handleTouchMove);
     };
-  }, [view, onBack, onComplete]); // Dependencies updated to include handlers conceptually
+  }, [onBack, onComplete]);
 
   return (
-    <section className="h-screen w-full bg-black text-white flex flex-col justify-center relative overflow-hidden">
-      <div className="container mx-auto px-6 md:px-12 relative z-10 h-full flex flex-col justify-center">
-        {/* Stats Specific Content */}
+    <section className="h-screen w-full bg-black text-white flex flex-col justify-center items-center relative overflow-hidden">
+      <div className="container mx-auto px-6 md:px-12 relative z-10 h-full flex flex-col justify-center items-center">
         <motion.div
-          className="absolute inset-0 flex flex-col justify-center items-center w-full px-4 md:px-0"
-          initial={{ opacity: 1, y: 0 }}
-          animate={{
-            opacity: view === "stats" ? 1 : 0,
-            y: view === "stats" ? 0 : -100,
-            pointerEvents: view === "stats" ? "auto" : "none",
-          }}
-          transition={{ duration: 0.8, ease: "easeInOut" }}
+          className="flex flex-col justify-center items-center w-full max-w-5xl"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          {/* Title - Adjusted position */}
-          <div className="text-center mb-16 md:mb-24 mt-[-20vh]">
-            <h2 className="text-5xl md:text-7xl font-light tracking-tight">
-              Why Trust <span className="font-bold text-blue-500">Incial?</span>
+          {/* Title */}
+          <div className="text-center mb-24 md:mb-32">
+            <h2 className="text-5xl md:text-7xl font-light tracking-tight italic text-white">
+              Why Trust{" "}
+              <span className="font-bold text-[#5ba4e6] not-italic">
+                Incial?
+              </span>
             </h2>
           </div>
 
           {/* Stats Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 text-center w-full max-w-5xl">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-8 text-center w-full">
             {stats.map((stat, index) => (
               <div key={index} className="flex flex-col items-center">
-                <div className="text-6xl md:text-7xl font-bold text-blue-500 mb-2 italic">
+                <div className="text-7xl md:text-[80px] font-bold text-[#5ba4e6] mb-4 italic tracking-tighter">
                   {stat.value}
                 </div>
                 <div className="text-xl md:text-2xl text-white font-normal">
@@ -103,59 +97,6 @@ export default function TrustSection({
                 </div>
               </div>
             ))}
-          </div>
-        </motion.div>
-
-        {/* Shared Marquee Section - Animates Position */}
-        <motion.div
-          className="absolute left-0 right-0 z-20 flex flex-col items-center"
-          initial={{ top: "65%" }}
-          animate={{
-            top: view === "stats" ? "65%" : "15%",
-          }}
-          transition={{ duration: 0.8, ease: "easeInOut" }}
-        >
-          <div className="w-full max-w-6xl">
-            <p className="text-lg md:text-xl text-white italic mb-6 pl-4 md:pl-0 text-center md:text-left transition-opacity duration-500">
-              Some of Our Awesome Clients:
-            </p>
-            <ClientMarquee />
-          </div>
-        </motion.div>
-
-        {/* Testimonials Specific Content */}
-        <motion.div
-          className="absolute inset-0 flex flex-col justify-center items-center w-full pt-40"
-          initial={{ opacity: 0, y: 100 }}
-          animate={{
-            opacity: view === "testimonials" ? 1 : 0,
-            y: view === "testimonials" ? 0 : 100,
-            pointerEvents: view === "testimonials" ? "auto" : "none",
-          }}
-          transition={{ duration: 0.8, ease: "easeInOut" }}
-        >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24 max-w-6xl mx-auto w-full px-6 mt-20">
-            <div className="pl-4 border-l-2 border-blue-500/50">
-              <p className="text-lg md:text-xl italic text-gray-300 mb-6 font-light leading-relaxed">
-                “Founded in 2024 in Kanjirappally, Kerala, we started as a small
-                team of passionate creators and strategists determined to make a
-                difference in the digital world.”
-              </p>
-              <p className="text-right text-blue-400 font-bold tracking-wide">
-                ~ Client Name
-              </p>
-            </div>
-
-            <div className="pl-4 border-l-2 border-blue-500/50">
-              <p className="text-lg md:text-xl italic text-gray-300 mb-6 font-light leading-relaxed">
-                “Founded in 2024 in Kanjirappally, Kerala, we started as a small
-                team of passionate creators and strategists determined to make a
-                difference in the digital world.”
-              </p>
-              <p className="text-right text-blue-400 font-bold tracking-wide">
-                ~ Client Name
-              </p>
-            </div>
           </div>
         </motion.div>
       </div>

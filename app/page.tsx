@@ -9,10 +9,18 @@ import {
   HeroSection,
   ScrollSection,
   TrustSection,
+  ClientSection,
   ContactSection,
 } from "@/components/sections";
 
-type Phase = "greetings" | "hero" | "scrolling" | "trust" | "about" | "contact";
+type Phase =
+  | "greetings"
+  | "hero"
+  | "scrolling"
+  | "trust"
+  | "client"
+  | "about"
+  | "contact";
 
 export default function Home() {
   const [phase, setPhase] = useState<Phase>("greetings");
@@ -114,6 +122,23 @@ export default function Home() {
                     // Let's modify phase handler for that if you want, but sticking to "scrolling" works
                     setPhase("scrolling");
                   }}
+                  onComplete={() => setPhase("client")}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <AnimatePresence>
+            {phase === "client" && (
+              <motion.div
+                key="client"
+                initial={{ y: "100vh", opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: "-100vh", opacity: 0 }}
+                transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <ClientSection
+                  onBack={() => setPhase("trust")}
                   onComplete={() => setPhase("contact")}
                 />
               </motion.div>
@@ -129,7 +154,7 @@ export default function Home() {
                 exit={{ y: "100vh", opacity: 0 }}
                 transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
               >
-                <ContactSection onBack={() => setPhase("trust")} />
+                <ContactSection onBack={() => setPhase("client")} />
               </motion.div>
             )}
           </AnimatePresence>
