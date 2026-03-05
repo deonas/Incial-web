@@ -7,7 +7,7 @@ import Footer from "@/components/layout/Footer";
 import Image from "next/image";
 
 // ── Local Asset URLs ──────────
-const imgHeroBanner = "/images/about/Team-Photo.JPG";
+const imgHeroBanner = "/images/about/Team-Photo.png";
 const imgBrand = "/images/about/imgBrand.png";
 const imgImpact = "/images/about/imgImpact.png";
 const imgAwardsIcon = "/images/about/imgAwardsIcon.svg";
@@ -393,18 +393,11 @@ export default function AboutSection({
 }
 
 // ── Team member card sub-component ───────────────────────────────────────
-interface TeamMember {
-  name: string;
-  role: string;
-  img: string;
-  objectPos: string;
-}
-
 function TeamMemberCard({
   member,
   delay,
 }: {
-  member: TeamMember;
+  member: any;
   delay: number;
 }) {
   return (
@@ -420,11 +413,11 @@ function TeamMemberCard({
       <div className="relative w-[247px] h-[276px] mb-4 overflow-hidden rounded-[125px]">
         <div className="absolute bottom-0 left-0 w-[247px] h-[247px] rounded-full bg-[#d5d5d5]" />
         <Image
-          src={member.img}
+          src={member.img || "/images/about/team-placeholder.jpg"}
           alt={member.name}
           fill
           sizes="247px"
-          className="object-cover object-top grayscale hover:grayscale-0 transition-all duration-500"
+          className={`object-cover ${member.objectPos || "object-top"} grayscale hover:grayscale-0 transition-all duration-500`}
         />
       </div>
       <h3 className="font-[Poppins,sans-serif] font-bold text-[24px] text-white">
