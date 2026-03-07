@@ -114,6 +114,6 @@
   "impactTitle": "Our Impact",
   "impactText": "Every project is a story of growth, transformation, and measurable success. We take pride in helping clients achieve goals, enhance visibility, and create memorable digital experiences.",
   "heroBanner": "/images/about/Team-Photo.png",
-  "brandImage": "http://localhost:3845/assets/0fbbc5acf6bdc7c226199fc36f3e74a0063f74b6.png",
-  "impactImage": "http://localhost:3845/assets/5a21ea612416097248e56d8512c4621ee8a5ac3d.png"
+  "brandImage": "/images/about/Brand.png",
+  "impactImage": "/images/about/Impact.png"
 }

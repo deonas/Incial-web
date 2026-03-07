@@ -28,7 +28,7 @@ export default function ClientWrapper({
           borderTopRightRadius: menuOpen ? 24 : 0,
         }}
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        className="relative origin-top overflow-hidden bg-black text-white min-h-screen"
+        className="relative origin-top overflow-x-hidden bg-black text-white min-h-screen"
         style={{ zIndex: 30 }}
       >
         {/* Content */}

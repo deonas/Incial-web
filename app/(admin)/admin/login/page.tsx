@@ -31,30 +31,19 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#09090b] flex items-center justify-center relative overflow-hidden">
-      {/* Background grid */}
-      <div
-        className="absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage: `linear-gradient(#3b82f6 1px, transparent 1px), linear-gradient(90deg, #3b82f6 1px, transparent 1px)`,
-          backgroundSize: "40px 40px",
-        }}
-      />
-      {/* Blue glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-blue-600/5 blur-3xl pointer-events-none" />
-
+    <div className="min-h-screen bg-black flex items-center justify-center relative overflow-hidden font-[Inter,sans-serif]">
       <div className="relative z-10 w-full max-w-md px-6">
         {/* Logo */}
         <div className="flex items-center justify-center mb-10">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center shadow-lg shadow-blue-500/25">
-              <span className="text-white font-black text-lg">I</span>
+            <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center">
+              <span className="text-black font-black text-lg">I</span>
             </div>
             <div>
-              <div className="text-white font-bold text-xl tracking-wide">
+              <div className="text-white font-bold text-xl tracking-wide font-[Poppins,sans-serif]">
                 INCIAL
               </div>
-              <div className="text-[11px] text-white/40 uppercase tracking-widest">
+              <div className="text-[11px] text-[#8e8e8e] uppercase tracking-widest">
                 Admin Portal
               </div>
             </div>
@@ -62,48 +51,51 @@ export default function AdminLoginPage() {
         </div>
 
         {/* Card */}
-        <div className="bg-white/[0.03] border border-white/10 rounded-2xl p-8 backdrop-blur-sm">
+        <div className="border border-[#1e1e1e] rounded-3xl p-8 bg-transparent">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-8 h-8 rounded-lg bg-blue-600/15 border border-blue-500/20 flex items-center justify-center">
-              <Lock size={14} className="text-blue-400" />
+            <div className="w-8 h-8 rounded-full border border-[#1e1e1e] flex items-center justify-center">
+              <Lock size={14} className="text-white" />
             </div>
             <div>
-              <h1 className="text-white font-semibold text-base">Sign In</h1>
-              <p className="text-white/40 text-xs">
+              <h1 className="text-white font-bold text-base font-[Poppins,sans-serif]">
+                Sign In
+              </h1>
+              <p className="text-[#8e8e8e] text-xs">
                 Enter your admin secret key
               </p>
             </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="relative">
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-4 flex flex-col items-center"
+          >
+            <div className="relative w-full border border-[#1e1e1e] rounded-full h-[42px] flex items-center px-4">
               <input
                 type={showSecret ? "text" : "password"}
                 value={secret}
                 onChange={(e) => setSecret(e.target.value)}
                 placeholder="Secret key"
                 required
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/25 text-sm focus:outline-none focus:border-blue-500/50 focus:bg-white/[0.07] transition-all pr-10"
+                className="w-full bg-transparent outline-none text-white placeholder-[#8e8e8e] text-[15px]"
               />
               <button
                 type="button"
                 onClick={() => setShowSecret(!showSecret)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/60 transition-colors"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-[#8e8e8e] hover:text-white transition-colors"
               >
                 {showSecret ? <EyeOff size={15} /> : <Eye size={15} />}
               </button>
             </div>
 
             {error && (
-              <p className="text-red-400 text-xs bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">
-                {error}
-              </p>
+              <p className="text-red-400 text-xs text-center w-full">{error}</p>
             )}
 
             <button
               type="submit"
               disabled={loading || !secret}
-              className="w-full bg-blue-600 hover:bg-blue-500 disabled:bg-blue-600/40 disabled:cursor-not-allowed text-white font-semibold text-sm py-3 rounded-xl transition-all duration-200 flex items-center justify-center gap-2"
+              className="w-full bg-white hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed text-black font-semibold text-[14px] h-[42px] rounded-full transition-colors flex items-center justify-center gap-2 mt-2"
             >
               {loading ? (
                 <>

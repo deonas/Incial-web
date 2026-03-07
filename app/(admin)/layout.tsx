@@ -32,12 +32,12 @@ export default function AdminLayout({
   if (pathname === "/admin/login") return <>{children}</>;
 
   return (
-    <div className="flex min-h-screen bg-[#09090b] text-white">
+    <div className="admin-panel flex w-full h-screen bg-black text-white font-[Inter,sans-serif] overflow-hidden">
       <Toaster position="bottom-right" theme="dark" richColors />
       <AdminSidebar />
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         <AdminHeader />
-        <main className="flex-1 p-6 overflow-auto">{children}</main>
+        <main className="flex-1 p-8 overflow-y-auto w-full">{children}</main>
       </div>
     </div>
   );

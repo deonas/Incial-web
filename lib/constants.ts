@@ -9,12 +9,12 @@ export const greetings = [
 
 export const navLinks = [
   { label: "Home", href: "/" },
-  { label: "About Us", href: "/about" },
-  { label: "Products", href: "/products" },
-  { label: "Case Study", href: "/case-studies" },
+  { label: "About Us", href: "/about", sectionId: "about" },
+  { label: "Products", href: "/products", sectionId: "products" },
+  { label: "Case Study", href: "/case-studies", sectionId: "casestudies" },
   { label: "Services", href: "/#services" },
-  { label: "Careers", href: "/careers" },
-  { label: "Blogs", href: "/blogs" },
+  { label: "Careers", href: "/careers", sectionId: "careers" },
+  { label: "Blogs", href: "/blogs", sectionId: "blogs" },
   { label: "Contact Us", href: "/#contact" },
 ];
 

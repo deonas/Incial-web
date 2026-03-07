@@ -14,18 +14,21 @@ interface ScrollSectionProps {
   onScrollComplete?: () => void;
   onBack?: () => void;
   startAtEnd?: boolean;
+  skipAnimation?: boolean;
 }
 
 export default function ScrollSection({
   onScrollComplete,
   onBack,
   startAtEnd = false,
+  skipAnimation = false,
 }: ScrollSectionProps) {
   const [wordIndex, setWordIndex] = useState(
     startAtEnd ? rotatingWords.length - 1 : 0,
   );
   const [showLogo, setShowLogo] = useState(startAtEnd);
   const [showServices, setShowServices] = useState(startAtEnd);
+  const [returnFromServices, setReturnFromServices] = useState(false);
 
   const isScrolling = useRef(false);
   const circleRef = useRef<HTMLDivElement>(null);
@@ -52,9 +55,16 @@ export default function ScrollSection({
       if (e.deltaY > 0) {
         // Scroll Down
         isScrolling.current = true;
-        if (showLogo && !showServices) {
+
+        if (!showLogo) {
+          // If the user scrolls down during the introductory text rotation,
+          // instantly jump to the finished LogoScreen state.
+          setReturnFromServices(true);
+          setShowLogo(true);
+        } else if (showLogo && !showServices) {
           setShowServices(true);
         }
+
         setTimeout(() => {
           isScrolling.current = false;
         }, 500); // Debounce
@@ -94,7 +104,11 @@ export default function ScrollSection({
         if (deltaY > 0) {
           // Swipe Up / Scroll Down
           isScrolling.current = true;
-          if (showLogo && !showServices) {
+
+          if (!showLogo) {
+            setReturnFromServices(true);
+            setShowLogo(true);
+          } else if (showLogo && !showServices) {
             setShowServices(true);
           }
         } else {
@@ -135,12 +149,19 @@ export default function ScrollSection({
               <ServicesSection
                 initialSlide={startAtEnd ? 3 : 0}
                 onComplete={onScrollComplete}
-                onBack={() => setShowServices(false)}
+                onBack={() => {
+                  setReturnFromServices(true);
+                  setShowServices(false);
+                }}
               />
             ) : !showLogo ? (
               <RotatingText wordIndex={wordIndex} words={rotatingWords} />
             ) : (
-              <LogoScreen />
+              <LogoScreen
+                skipAnimation={
+                  startAtEnd || returnFromServices || skipAnimation
+                }
+              />
             )}
           </AnimatePresence>
         </main>

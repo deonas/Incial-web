@@ -1,39 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import Link from "next/link";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-
-// ── Inline product data ────────────────────────────────────────────────────
-const products = [
-  {
-    id: 1,
-    name: "WorkHub",
-    tagline: "by Incial",
-    image: "/images/workhub.png",
-    description: [
-      "WorkHub is not a regular enterprise management software or CRM. It is designed to remove complexity and keep only what truly matters for a company to operate smoothly.",
-      "There are no unnecessary features, no confusing workflows, and no heavy enterprise clutter.",
-      "WorkHub includes only the essential tools a company needs, such as task management, a clean CRM, team visibility, and clear reporting.",
-    ],
-    tryUrl: "https://workhub.incial.in",
-  },
-  {
-    id: 2,
-    name: "StockFlow",
-    tagline: "by Incial",
-    image: "/images/stockflow.png",
-    description: [
-      "StockFlow is a smart and simple inventory management software designed to give businesses complete control over their inventory.",
-      "It helps track inventory coming in and going out, monitor real-time stock levels, organise inventory enrolment, and reduce losses, errors, and manual tracking.",
-      "With clean dashboards and clear insights, StockFlow enables faster and better business decisions. It is ideal for any business that handles physical stock and needs clarity and control.",
-    ],
-    tryUrl: "https://stockflow.incial.in",
-  },
-];
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
+import type { ProductsData, Product } from "@/lib/dataLoader";
 
 // ── Arrow icon ─────────────────────────────────────────────────────────────
 function ArrowRight() {
@@ -60,7 +33,7 @@ function ProductSection({
   product,
   index,
 }: {
-  product: (typeof products)[0];
+  product: Product;
   index: number;
 }) {
   return (
@@ -75,27 +48,28 @@ function ProductSection({
         {product.name}
       </h2>
 
-      {/*
-        Image card
-        Figma: width 985, height 408, border-radius 10px
-        Container is 1141px so image fills ~86% width naturally
-      */}
+      {/* Image card */}
       <div
-        className="relative w-full mb-8 overflow-hidden"
+        className="relative w-full mb-8 overflow-hidden bg-[#111]"
         style={{ height: "408px", borderRadius: "10px" }}
       >
-        <Image
-          src={product.image}
-          alt={product.name}
-          fill
-          className="object-cover object-top"
-          priority={index === 0}
-        />
+        {product.image && (
+          <Image
+            src={product.image}
+            alt={product.name}
+            fill
+            className="object-cover object-top"
+            priority={index === 0}
+          />
+        )}
       </div>
 
       {/* Description + CTA row */}
       <div className="flex flex-col" style={{ gap: "20px" }}>
-        {product.description.map((para, i) => (
+        {(Array.isArray(product.description)
+          ? product.description
+          : (product.description || "").split("\n\n").filter(Boolean)
+        ).map((para, i, arr) => (
           <div key={i} className="flex items-end justify-between gap-8">
             <p
               className="text-white"
@@ -111,7 +85,7 @@ function ProductSection({
               {para}
             </p>
             {/* CTA only shown beside the last paragraph */}
-            {i === product.description.length - 1 && (
+            {i === arr.length - 1 && product.tryUrl && (
               <a
                 href={product.tryUrl}
                 target="_blank"
@@ -131,6 +105,59 @@ function ProductSection({
 // ── Page ───────────────────────────────────────────────────────────────────
 export default function ProductsPage() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [isDisabled, setIsDisabled] = useState(false);
+
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        const res = await fetch("/api/admin/products");
+        if (!res.ok) throw new Error("Failed to fetch products");
+        const data: ProductsData = await res.json();
+        // optionally filter for available and featured products
+        setProducts(data.products.filter((p) => p.available));
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    async function fetchConfig() {
+      try {
+        const res = await fetch("/api/admin/sections");
+        const data = await res.json();
+        const prodConfig = data.sections?.find((s: any) => s.id === "products");
+        if (prodConfig && !prodConfig.enabled) {
+          setIsDisabled(true);
+        }
+      } catch (err) {
+        // Ignore
+      }
+    }
+
+    fetchConfig().then(() => {
+      fetchProducts();
+    });
+  }, []);
+
+  if (isDisabled) {
+    return (
+      <div className="relative min-h-screen bg-white">
+        <Header
+          menuOpen={menuOpen}
+          onToggleMenu={() => setMenuOpen(!menuOpen)}
+        />
+        <div className="flex min-h-[70vh] items-center justify-center bg-black text-white px-6">
+          <div className="text-center">
+            <h1 className="text-3xl font-bold mb-4">Section Disabled</h1>
+            <p className="text-gray-400">This page is currently unavailable.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="relative min-h-screen bg-white">
@@ -144,7 +171,7 @@ export default function ProductsPage() {
           borderTopRightRadius: menuOpen ? 24 : 0,
         }}
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        className="relative origin-top overflow-hidden bg-black text-white min-h-screen"
+        className="relative origin-top overflow-x-hidden bg-black text-white min-h-screen"
         style={{ zIndex: 30 }}
       >
         <main className="pt-24 pb-20">
@@ -155,6 +182,13 @@ export default function ProductsPage() {
             transition={{ duration: 0.6 }}
             className="text-center mb-20 px-6"
           >
+            <div className="flex justify-center mb-10">
+              <Breadcrumbs
+                items={[{ label: "Home", href: "/" }, { label: "Products" }]}
+                variant="pill"
+                size="lg"
+              />
+            </div>
             <h1 className="text-3xl md:text-4xl font-bold italic mb-3">
               Products
             </h1>
@@ -172,11 +206,27 @@ export default function ProductsPage() {
             className="mx-auto w-full px-6 md:px-[149px]"
             style={{ maxWidth: "1439px" }}
           >
-            <div className="flex flex-col" style={{ gap: "150px" }}>
-              {products.map((product, i) => (
-                <ProductSection key={product.id} product={product} index={i} />
-              ))}
-            </div>
+            {loading ? (
+              <div className="text-center text-white/50 text-sm py-20 italic">
+                Loading products...
+              </div>
+            ) : (
+              <div className="flex flex-col" style={{ gap: "150px" }}>
+                {products.length === 0 ? (
+                  <div className="text-center text-white/50 text-sm italic py-10">
+                    No products available at the moment.
+                  </div>
+                ) : (
+                  products.map((product, i) => (
+                    <ProductSection
+                      key={product.id}
+                      product={product}
+                      index={i}
+                    />
+                  ))
+                )}
+              </div>
+            )}
 
             {/* ── Coming soon ────────────────────────────────────────────── */}
             <motion.div

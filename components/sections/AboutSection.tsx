@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import Footer from "@/components/layout/Footer";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 
 import Image from "next/image";
 
@@ -45,6 +46,12 @@ export default function AboutSection({
     phone: "",
     message: "",
   });
+
+  const [showAllTeam, setShowAllTeam] = useState(false);
+  const teamMembers = data?.teamMembers || [];
+  const visibleTeamMembers = showAllTeam
+    ? teamMembers
+    : teamMembers.slice(0, 6);
 
   useEffect(() => {
     fetch("/api/admin/about")
@@ -91,19 +98,13 @@ export default function AboutSection({
       style={{ minHeight: "100vh" }}
     >
       {/* ── Breadcrumb ───────────────────────────────────────────────── */}
-      <div className="flex items-center justify-center gap-2 pt-6 pb-2">
-        <span className="bg-[#05101e] text-[#49a8ff] text-[10px] font-[Poppins,sans-serif] px-3 py-1 rounded-full">
-          Home
-        </span>
-        <span className="text-[#49a8ff] text-[10px] rotate-90 inline-block">
-          ›
-        </span>
-        <span className="bg-[#05101e] text-[#49a8ff] text-[10px] font-[Poppins,sans-serif] px-3 py-1 rounded-full">
-          About Us
-        </span>
-      </div>
-
+      <Breadcrumbs
+        items={[{ label: "Home", href: "/" }, { label: "About Us" }]}
+        variant="pill"
+        size="lg"
+      />
       {/* ── Hero Banner ──────────────────────────────────────────────── */}
+
       <motion.div
         initial="hidden"
         whileInView="visible"
@@ -133,7 +134,6 @@ export default function AboutSection({
           />
         )}
       </motion.div>
-
       {/* ── Our Story ────────────────────────────────────────────────── */}
       <motion.div
         initial="hidden"
@@ -151,7 +151,6 @@ export default function AboutSection({
             "Incial began with a simple vision: to empower brands, businesses, and ideas with innovative digital solutions that create lasting impact. Founded in 2024 in Kanjirappally, Kerala, we started as a small team of passionate creators and strategists determined to make a difference. From those first projects to now serving businesses across industries, our journey has been fueled by creativity, collaboration, and a relentless drive to push boundaries."}
         </p>
       </motion.div>
-
       {/* ── Our Purpose (white card) ──────────────────────────────────── */}
       <motion.div
         initial="hidden"
@@ -170,7 +169,6 @@ export default function AboutSection({
             "Our purpose is clear: to build brands that resonate, businesses that grow, and beyond that, to innovate continuously. We align strategy with creativity, technology with human connection, and ideas with measurable results."}
         </p>
       </motion.div>
-
       {/* ── Meet Our Team ────────────────────────────────────────────── */}
       <motion.div
         initial="hidden"
@@ -188,12 +186,11 @@ export default function AboutSection({
             "Behind every project is a team of talented professionals — creatives, marketers, designers, and technologists — united by passion and expertise. Together, we bring ideas to life and transform challenges into opportunities."}
         </p>
       </motion.div>
-
       <div
-        className="mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mb-24 px-6"
+        className="mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mb-8 px-6"
         style={{ maxWidth: 900 }}
       >
-        {(data?.teamMembers || []).map((member, i) => (
+        {visibleTeamMembers.map((member, i) => (
           <TeamMemberCard
             key={member.id || i}
             member={member}
@@ -201,7 +198,16 @@ export default function AboutSection({
           />
         ))}
       </div>
-
+      {teamMembers.length > 6 && (
+        <div className="flex justify-center mb-24">
+          <button
+            onClick={() => setShowAllTeam(!showAllTeam)}
+            className="text-white border border-white/20 hover:bg-white/10 px-6 py-2 rounded-full font-[Poppins,sans-serif] text-[14px] transition-colors"
+          >
+            {showAllTeam ? "View Less" : "View All"}
+          </button>
+        </div>
+      )}
       {/* ── Awards & Recognitions ─────────────────────────────────────── */}
       <motion.div
         initial="hidden"
@@ -219,7 +225,6 @@ export default function AboutSection({
             "Over the years, Incial has been proud to receive industry awards and recognitions that celebrate our commitment to excellence, innovation, and client success. These honors inspire us to continuously raise the bar."}
         </p>
       </motion.div>
-
       <div className="flex flex-col md:flex-row justify-center gap-12 md:gap-32 pb-24 px-6">
         {(data?.awards || []).map((award, i) => (
           <motion.div
@@ -248,7 +253,6 @@ export default function AboutSection({
           </motion.div>
         ))}
       </div>
-
       {/* ── Our Brand + Our Impact (stacked image cards) ─────────────── */}
       <div
         className="mx-auto mb-16"
@@ -310,7 +314,6 @@ export default function AboutSection({
           </div>
         </motion.div>
       </div>
-
       {/* ── Contact ──────────────────────────────────────────────────── */}
       <motion.div
         initial="hidden"
@@ -383,7 +386,6 @@ export default function AboutSection({
           </div>
         </form>
       </motion.div>
-
       {/* ── Footer ───────────────────────────────────────────────────── */}
       <div className="px-12 pb-6">
         <Footer />
@@ -393,13 +395,7 @@ export default function AboutSection({
 }
 
 // ── Team member card sub-component ───────────────────────────────────────
-function TeamMemberCard({
-  member,
-  delay,
-}: {
-  member: any;
-  delay: number;
-}) {
+function TeamMemberCard({ member, delay }: { member: any; delay: number }) {
   return (
     <motion.div
       initial="hidden"

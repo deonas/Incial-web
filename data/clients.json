@@ -2,6 +2,21 @@
   "headerText": "Some of Our Awesome Clients:",
   "clients": [
     {
+      "id": "blaupunkt",
+      "name": "Blaupunkt",
+      "src": "/clients/blaupunkt.png"
+    },
+    {
+      "id": "voltant",
+      "name": "Voltant Energy",
+      "src": "/clients/voltant.png"
+    },
+    {
+      "id": "datalabs",
+      "name": "DataLabs",
+      "src": "/clients/Datalabs.png"
+    },
+    {
       "id": "precon",
       "name": "Precon",
       "src": "/clients/precon.png"
@@ -15,21 +30,6 @@
       "id": "usi3dt",
       "name": "USI3DT",
       "src": "/clients/usi3dt.png"
-    },
-    {
-      "id": "blaupunkt",
-      "name": "Blaupunkt",
-      "src": "/clients/blaupunkt.png"
-    },
-    {
-      "id": "voltant",
-      "name": "Voltant Energy",
-      "src": "/clients/voltant.png"
-    },
-    {
-      "id": "datalabs",
-      "name": "DataLabs",
-      "src": "/clients/datalabs.png"
     },
     {
       "id": "livelong",
@@ -107,14 +107,14 @@
       "src": "/clients/homescapes.png"
     },
     {
-      "id": "intern-hub",
-      "name": "Intern Hub",
-      "src": "/clients/intern-hub.png"
-    },
-    {
       "id": "zaburb",
       "name": "Zaburb",
-      "src": "/clients/zaburb.png"
+      "src": "/clients/usi.png"
+    },
+    {
+      "id": "1772861291899",
+      "name": "Zabrub",
+      "src": "/clients/Zabrub.png"
     },
     {
       "id": "logo2",
@@ -142,9 +142,9 @@
       "src": "/clients/skinzone.png"
     },
     {
-      "id": "untitled1",
-      "name": "Client",
-      "src": "/clients/untitled1.png"
+      "id": "1772728901003",
+      "name": "jaybees",
+      "src": "/clients/Varchikenfood.png"
     },
     {
       "id": "livelong-pala",
@@ -152,14 +152,14 @@
       "src": "/clients/livelong-pala.png"
     },
     {
+      "id": "untitled1",
+      "name": "Livelongpala",
+      "src": "/clients/untitled1.png"
+    },
+    {
       "id": "varkitchen",
       "name": "Varkitchen",
       "src": "/clients/varkitchen.png"
-    },
-    {
-      "id": "1772728901003",
-      "name": "jaybees",
-      "src": "/clients/jaybees.png"
     }
   ],
   "testimonials": [

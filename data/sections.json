@@ -1,0 +1,49 @@
+{
+  "sections": [
+    {
+      "id": "scrolling",
+      "label": "Home (Intro + Services)",
+      "enabled": true
+    },
+    {
+      "id": "trust",
+      "label": "Trust & Training Stats",
+      "enabled": true
+    },
+    {
+      "id": "client",
+      "label": "Clients & Testimonials",
+      "enabled": true
+    },
+    {
+      "id": "contact",
+      "label": "Contact",
+      "enabled": true
+    },
+    {
+      "id": "products",
+      "label": "Products Page",
+      "enabled": true
+    },
+    {
+      "id": "casestudies",
+      "label": "Case Studies Page",
+      "enabled": true
+    },
+    {
+      "id": "blogs",
+      "label": "Blogs Page",
+      "enabled": true
+    },
+    {
+      "id": "about",
+      "label": "About Us Page",
+      "enabled": true
+    },
+    {
+      "id": "careers",
+      "label": "Careers Page",
+      "enabled": true
+    }
+  ]
+}

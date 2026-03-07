@@ -2,7 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
 
-const ALLOWED_SECTIONS = ["about", "clients", "trust", "blogs", "services"];
+const ALLOWED_SECTIONS = [
+  "about", "clients", "trust", "blogs", "services",
+  "casestudies", "products", "sections",
+];
 
 function validateAuth(req: NextRequest): boolean {
   const authHeader = req.headers.get("authorization");

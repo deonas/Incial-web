@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
 
 // ── Job Card skeleton ──────────────────────────────────────────────────────
 interface Job {
@@ -145,6 +146,42 @@ function FadeIn({
 export default function CareersPage() {
   const [menuOpen, setMenuOpen] = useState(false);
   const jobs: Job[] = [];
+  const [isDisabled, setIsDisabled] = useState(false);
+
+  useEffect(() => {
+    async function fetchConfig() {
+      try {
+        const res = await fetch("/api/admin/sections");
+        const data = await res.json();
+        const careersConfig = data.sections?.find(
+          (s: any) => s.id === "careers",
+        );
+        if (careersConfig && !careersConfig.enabled) {
+          setIsDisabled(true);
+        }
+      } catch (err) {
+        // Ignore
+      }
+    }
+    fetchConfig();
+  }, []);
+
+  if (isDisabled) {
+    return (
+      <div className="relative min-h-screen bg-white">
+        <Header
+          menuOpen={menuOpen}
+          onToggleMenu={() => setMenuOpen(!menuOpen)}
+        />
+        <div className="flex min-h-[70vh] items-center justify-center bg-black text-white px-6">
+          <div className="text-center">
+            <h1 className="text-3xl font-bold mb-4">Section Disabled</h1>
+            <p className="text-gray-400">This page is currently unavailable.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="relative min-h-screen bg-white">
@@ -158,26 +195,18 @@ export default function CareersPage() {
           borderTopRightRadius: menuOpen ? 24 : 0,
         }}
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        className="relative origin-top overflow-hidden bg-black text-white min-h-screen"
+        className="relative origin-top overflow-x-hidden bg-black text-white min-h-screen"
         style={{ zIndex: 30 }}
       >
         <main className="pt-24 pb-32">
           {/* ── Breadcrumb ───────────────────────────────────────────────── */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="flex items-center justify-center gap-2 text-sm mb-10"
-          >
-            <Link
-              href="/"
-              className="text-blue-500 hover:text-blue-400 transition-colors"
-            >
-              Home
-            </Link>
-            <span className="text-gray-500">›</span>
-            <span className="text-gray-400">Careers</span>
-          </motion.div>
+          <div className="flex justify-center mb-10 pt-4">
+            <Breadcrumbs
+              items={[{ label: "Home", href: "/" }, { label: "Careers" }]}
+              variant="pill"
+              size="lg"
+            />
+          </div>
 
           {/* ── Page title ───────────────────────────────────────────────── */}
           <motion.h1

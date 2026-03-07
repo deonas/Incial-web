@@ -5,43 +5,26 @@ import { AnimatePresence, motion } from "framer-motion";
 import { greetings } from "@/lib/constants";
 import { Header, NavMenu } from "@/components/layout";
 import { GreetingsOverlay, ScrollSection } from "@/components/sections";
-import dynamic from "next/dynamic";
+import type { SectionConfig } from "@/lib/dataLoader";
 
-const TrustSection = dynamic(
-  () => import("@/components/sections/TrustSection"),
-);
-const ClientSection = dynamic(
-  () => import("@/components/sections/ClientSection"),
-);
-const ContactSection = dynamic(
-  () => import("@/components/sections/ContactSection"),
-);
+import TrustSection from "@/components/sections/TrustSection";
+import ClientSection from "@/components/sections/ClientSection";
+import ContactSection from "@/components/sections/ContactSection";
 
-type Phase =
-  | "greetings"
-  | "scrolling"
-  | "trust"
-  | "client"
-  | "about"
-  | "contact";
+// All possible phases in order (excluding greetings which always shows)
+const ALL_PHASES = ["scrolling", "trust", "client", "contact"] as const;
+type Phase = "greetings" | (typeof ALL_PHASES)[number];
 
 const sectionVariants = {
-  enter: (direction: number) => {
-    return {
-      y: direction > 0 ? "100vh" : "-100vh",
-      opacity: 0,
-    };
-  },
-  center: {
-    y: 0,
-    opacity: 1,
-  },
-  exit: (direction: number) => {
-    return {
-      y: direction < 0 ? "100vh" : "-100vh",
-      opacity: 0,
-    };
-  },
+  enter: (direction: number) => ({
+    y: direction > 0 ? "100vh" : "-100vh",
+    opacity: 0,
+  }),
+  center: { y: 0, opacity: 1 },
+  exit: (direction: number) => ({
+    y: direction < 0 ? "100vh" : "-100vh",
+    opacity: 0,
+  }),
 };
 
 export default function Home() {
@@ -50,11 +33,50 @@ export default function Home() {
   const [greetingIndex, setGreetingIndex] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrollSectionStartAtEnd, setScrollSectionStartAtEnd] = useState(false);
+  const [hasCompletedInitialCrawl, setHasCompletedInitialCrawl] =
+    useState(false);
+  const [enabledSections, setEnabledSections] = useState<string[]>(
+    ALL_PHASES as unknown as string[],
+  );
+
+  /* ── Load section config from API ────────────────── */
+  useEffect(() => {
+    fetch("/api/admin/sections")
+      .then((r) => r.json())
+      .then((data: { sections: SectionConfig[] }) => {
+        const enabled = data.sections.filter((s) => s.enabled).map((s) => s.id);
+        // Always keep scrolling (homepage) enabled as fallback
+        setEnabledSections(enabled.length > 0 ? enabled : ["scrolling"]);
+      })
+      .catch(() => {
+        // Fallback: show all sections if API fails
+        setEnabledSections([...ALL_PHASES]);
+      });
+  }, []);
+
+  /* ── Helper: get ordered list of enabled phases ─── */
+  const orderedEnabledPhases = ALL_PHASES.filter((p) =>
+    enabledSections.includes(p),
+  );
+
+  function getNextPhase(current: Phase, dir: 1 | -1): Phase {
+    const idx = orderedEnabledPhases.indexOf(
+      current as (typeof ALL_PHASES)[number],
+    );
+    if (dir === 1) {
+      return orderedEnabledPhases[idx + 1] ?? current;
+    } else {
+      return orderedEnabledPhases[idx - 1] ?? current;
+    }
+  }
+
+  function isLastPhase(current: Phase) {
+    return orderedEnabledPhases[orderedEnabledPhases.length - 1] === current;
+  }
 
   /* ── Greeting sequence ──────────────────────────── */
   useEffect(() => {
     if (phase !== "greetings") return;
-
     if (greetingIndex < greetings.length - 1) {
       const timer = setTimeout(() => setGreetingIndex((prev) => prev + 1), 500);
       return () => clearTimeout(timer);
@@ -69,6 +91,19 @@ export default function Home() {
 
   const handleToggleMenu = useCallback(() => setMenuOpen((prev) => !prev), []);
 
+  const goNext = useCallback(() => {
+    setDirection(1);
+    setPhase((curr) => getNextPhase(curr, 1));
+  }, [orderedEnabledPhases]);
+
+  const goBack = useCallback(
+    (current: Phase) => {
+      setDirection(-1);
+      setPhase(getNextPhase(current, -1));
+    },
+    [orderedEnabledPhases],
+  );
+
   return (
     <>
       {/* Greetings overlay */}
@@ -80,16 +115,14 @@ export default function Home() {
 
       {/* Main page */}
       <div className="relative bg-white">
-        {/* Header — hidden during greetings */}
         {phase !== "greetings" && (
           <Header menuOpen={menuOpen} onToggleMenu={handleToggleMenu} />
         )}
 
-        {/* Navigation dropdown */}
         <AnimatePresence>{menuOpen && <NavMenu />}</AnimatePresence>
 
-        {/* Content area — shifts down when menu is open */}
         <motion.div
+          initial={{ borderTopLeftRadius: 0, borderTopRightRadius: 0 }}
           animate={{
             y: menuOpen ? 100 : 0,
             scale: menuOpen ? 0.95 : 1,
@@ -113,15 +146,20 @@ export default function Home() {
               >
                 <ScrollSection
                   startAtEnd={scrollSectionStartAtEnd}
+                  skipAnimation={hasCompletedInitialCrawl}
                   onScrollComplete={() => {
-                    setDirection(1);
-                    setPhase("trust");
+                    setHasCompletedInitialCrawl(true);
+                    const next = getNextPhase("scrolling", 1);
+                    if (next !== "scrolling") {
+                      setDirection(1);
+                      setPhase(next);
+                    }
                   }}
                 />
               </motion.div>
             )}
 
-            {phase === "trust" && (
+            {phase === "trust" && enabledSections.includes("trust") && (
               <motion.div
                 key="trust"
                 custom={direction}
@@ -138,14 +176,17 @@ export default function Home() {
                     setPhase("scrolling");
                   }}
                   onComplete={() => {
-                    setDirection(1);
-                    setPhase("client");
+                    const next = getNextPhase("trust", 1);
+                    if (next !== "trust") {
+                      setDirection(1);
+                      setPhase(next);
+                    }
                   }}
                 />
               </motion.div>
             )}
 
-            {phase === "client" && (
+            {phase === "client" && enabledSections.includes("client") && (
               <motion.div
                 key="client"
                 custom={direction}
@@ -156,19 +197,19 @@ export default function Home() {
                 transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
               >
                 <ClientSection
-                  onBack={() => {
-                    setDirection(-1);
-                    setPhase("trust");
-                  }}
+                  onBack={() => goBack("client")}
                   onComplete={() => {
-                    setDirection(1);
-                    setPhase("contact");
+                    const next = getNextPhase("client", 1);
+                    if (next !== "client") {
+                      setDirection(1);
+                      setPhase(next);
+                    }
                   }}
                 />
               </motion.div>
             )}
 
-            {phase === "contact" && (
+            {phase === "contact" && enabledSections.includes("contact") && (
               <motion.div
                 key="contact"
                 custom={direction}
@@ -178,12 +219,7 @@ export default function Home() {
                 exit="exit"
                 transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
               >
-                <ContactSection
-                  onBack={() => {
-                    setDirection(-1);
-                    setPhase("client");
-                  }}
-                />
+                <ContactSection onBack={() => goBack("contact")} />
               </motion.div>
             )}
           </AnimatePresence>

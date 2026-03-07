@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Poppins, Noto_Sans } from "next/font/google";
 import "./globals.css";
-import { CustomCursor, Ribbons } from "@/components/ui";
+import MarketingShell from "@/components/layout/MarketingShell";
+import DesktopOnlyScreen from "@/components/ui/DesktopOnlyScreen";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -29,19 +30,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="h-full w-full">
       <body
         suppressHydrationWarning
-        className={`${poppins.variable} ${notoSans.variable} font-sans antialiased`}
-        style={{ cursor: "none" }}
+        className={`${poppins.variable} ${notoSans.variable} font-sans antialiased h-full w-full`}
       >
-        <Ribbons
-          colors={["#60A5FA"]} // Single color = single trail line
-          baseThickness={8} // Reduced from 18 to make it thinner
-          pointCount={35}
-        />
-        <CustomCursor />
-        {children}
+        <DesktopOnlyScreen />
+        <div className="hidden lg:block h-full w-full">
+          <MarketingShell>{children}</MarketingShell>
+        </div>
       </body>
     </html>
   );

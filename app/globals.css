@@ -21,13 +21,44 @@
   }
 }
 
+html,
+body {
+  height: 100%;
+  width: 100%;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
+  margin: 0;
+  padding: 0;
 }
 
-/* ── Custom cursor: hide the native cursor everywhere ── */
+/* ── Custom cursor: hidden globally for marketing ── */
 * {
   cursor: none !important;
+}
+
+/* ── Admin panel: restore browser default cursor ── */
+.admin-panel,
+.admin-panel * {
+  cursor: auto !important;
+}
+
+.admin-panel button,
+.admin-panel a,
+.admin-panel input,
+.admin-panel textarea,
+.admin-panel select,
+.admin-panel [role="button"] {
+  cursor: pointer !important;
+}
+
+.admin-panel input[type="text"],
+.admin-panel input[type="email"],
+.admin-panel input[type="number"],
+.admin-panel input[type="tel"],
+.admin-panel textarea {
+  cursor: text !important;
 }
 

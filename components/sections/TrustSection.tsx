@@ -108,9 +108,12 @@ export default function TrustSection({
           </div>
 
           {/* Stats Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-8 text-center w-full">
+          <div className="flex flex-col md:flex-row flex-wrap justify-center items-center gap-16 md:gap-32 text-center w-full">
             {stats.map((stat, index) => (
-              <div key={index} className="flex flex-col items-center">
+              <div
+                key={index}
+                className="flex flex-col items-center min-w-[200px]"
+              >
                 <div className="text-7xl md:text-[80px] font-bold text-[#5ba4e6] mb-4 italic tracking-tighter">
                   {stat.value}
                 </div>

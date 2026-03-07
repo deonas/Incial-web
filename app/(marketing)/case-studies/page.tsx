@@ -1,65 +1,71 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-
-const caseStudies = [
-  {
-    id: 1,
-    slug: "homescapes",
-    category: "E-commerce",
-    title: "Homescapes",
-    description:
-      "How do you take a traditional offline home décor seller and turn them into a premium online brand? We built them a commanding digital presence from scratch, and opened the doors to e-commerce success.",
-  },
-  {
-    id: 2,
-    slug: "funfee",
-    category: "Social Media Marketing",
-    title: "Funfee: Restocafé & Kids Park",
-    description:
-      "How do you turn a newly launched kids' park, restocafé, and event space into the most talked-about destination in town, with 18k followers in just three weeks? That's exactly what we delivered with Funfee's bold social campaign.",
-  },
-  {
-    id: 3,
-    slug: "datalabs",
-    category: "Brand Identity",
-    title: "DataLabs Corporation",
-    description:
-      "What happens when an AI company is making big moves in the U.S. market, but doesn't have a brand identity that sets them apart? Enter where Incial stepped in for DataLabs Corporation.",
-  },
-  {
-    id: 4,
-    slug: "livelong-wealth",
-    category: "Financial Services Marketing",
-    title: "Livelong Wealth Pala",
-    description:
-      "How do you build awareness around wealth management and age-banking in a three-tier city, when you yourself are new to the financial world? That's the challenge we took on with Livelong Wealth Pala.",
-  },
-  {
-    id: 5,
-    slug: "internhub",
-    category: "Platform Development",
-    title: "InternHub",
-    description:
-      "How do you bridge the gap between bright engineering talent and top companies? That's exactly what we delivered with InternHub, a digital platform we built for Amal Jyothi College of Engineering.",
-  },
-  {
-    id: 6,
-    slug: "blaupunkt",
-    category: "Web Design & Development",
-    title: "Blaupunkt EV Website",
-    description:
-      "When one of the world's most recognized electronics brands, Blaupunkt, approached us to design their EV (Electric Vehicle) website, we knew this was a massive responsibility—and it was an honor, a challenge, and a milestone for Incial.",
-  },
-];
+import Breadcrumbs from "@/components/ui/Breadcrumbs";
+import type { CaseStudiesData, CaseStudy } from "@/lib/dataLoader";
 
 export default function CaseStudiesPage() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [caseStudies, setCaseStudies] = useState<CaseStudy[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [isDisabled, setIsDisabled] = useState(false);
+
+  useEffect(() => {
+    async function fetchCases() {
+      try {
+        const res = await fetch("/api/admin/casestudies");
+        if (!res.ok) throw new Error("Failed to fetch case studies");
+        const data: CaseStudiesData = await res.json();
+        // optionally filter. If there's an 'available' or 'published' flag, filter by it. Assuming all returned cases are public.
+        setCaseStudies(data.cases.filter((c) => c.slug));
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    async function fetchConfig() {
+      try {
+        const res = await fetch("/api/admin/sections");
+        const data = await res.json();
+        const csConfig = data.sections?.find(
+          (s: any) => s.id === "casestudies",
+        );
+        if (csConfig && !csConfig.enabled) {
+          setIsDisabled(true);
+        }
+      } catch (err) {
+        // Ignore
+      }
+    }
+
+    fetchConfig().then(() => {
+      fetchCases();
+    });
+  }, []);
+
+  if (isDisabled) {
+    return (
+      <div className="relative min-h-screen bg-white">
+        <Header
+          menuOpen={menuOpen}
+          onToggleMenu={() => setMenuOpen(!menuOpen)}
+        />
+        <div className="flex min-h-[70vh] items-center justify-center bg-black text-white px-6">
+          <div className="text-center">
+            <h1 className="text-3xl font-bold mb-4">Section Disabled</h1>
+            <p className="text-gray-400">This page is currently unavailable.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const handleToggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -78,27 +84,19 @@ export default function CaseStudiesPage() {
           borderTopRightRadius: menuOpen ? 24 : 0,
         }}
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        className="relative origin-top overflow-hidden bg-black text-white min-h-screen"
+        className="relative origin-top overflow-x-hidden bg-black text-white min-h-screen"
         style={{ zIndex: 30 }}
       >
         {/* Main Content */}
         <main className="pt-32 pb-20">
           {/* Breadcrumb */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="mb-10 flex items-center gap-2 text-sm px-6 md:px-16 lg:px-24 xl:px-32 max-w-[1400px] mx-auto"
-          >
-            <a
-              href="/"
-              className="text-blue-500 hover:text-blue-400 transition-colors"
-            >
-              Home
-            </a>
-            <span className="text-gray-500">›</span>
-            <span className="text-gray-400">Work</span>
-          </motion.div>
+          <div className="mb-10 px-6 md:px-16 lg:px-24 xl:px-32 max-w-[1400px] mx-auto">
+            <Breadcrumbs
+              items={[{ label: "Home", href: "/" }, { label: "Work" }]}
+              variant="pill"
+              size="lg"
+            />
+          </div>
 
           {/* Hero Section with Image - Full Width */}
           <motion.section
@@ -133,45 +131,59 @@ export default function CaseStudiesPage() {
 
           {/* Case Studies List */}
           <div className="space-y-16 mt-20 px-6 md:px-16 lg:px-24 xl:px-32 max-w-[1400px] mx-auto">
-            {caseStudies.map((study, index) => (
-              <motion.article
-                key={study.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.6, delay: index * 0.05 }}
-                className="group relative border-b border-white/10 pb-16 last:border-b-0"
-              >
-                <Link href={`/case-studies/${study.slug}`} className="block">
-                  <div className="flex flex-col md:flex-row gap-8 md:gap-10 items-start">
-                    {/* Image */}
-                    <div className="w-full md:w-[380px] lg:w-[420px] flex-shrink-0 overflow-hidden rounded-xl">
-                      <div className="relative aspect-[420/240] w-full">
-                        <Image
-                          src="/images/case1.webp"
-                          alt={study.title}
-                          fill
-                          className="object-cover grayscale brightness-75 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-500"
-                        />
+            {loading ? (
+              <div className="text-center text-white/50 text-sm py-20 italic">
+                Loading case studies...
+              </div>
+            ) : caseStudies.length === 0 ? (
+              <div className="text-center text-white/50 text-sm py-10 italic">
+                No case studies available.
+              </div>
+            ) : (
+              caseStudies.map((study, index) => (
+                <motion.article
+                  key={study.id}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-100px" }}
+                  transition={{ duration: 0.6, delay: index * 0.05 }}
+                  className="group relative border-b border-white/10 pb-16 last:border-b-0"
+                >
+                  <Link href={`/case-studies/${study.slug}`} className="block">
+                    <div className="flex flex-col md:flex-row gap-8 md:gap-10 items-start">
+                      {/* Image */}
+                      <div className="w-full md:w-[380px] lg:w-[420px] flex-shrink-0 overflow-hidden rounded-xl">
+                        <div className="relative aspect-[420/240] w-full">
+                          {study.heroImage ? (
+                            <Image
+                              src={study.heroImage}
+                              alt={study.title}
+                              fill
+                              className="object-cover grayscale brightness-75 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-500"
+                            />
+                          ) : (
+                            <div className="w-full h-full bg-[#222]" />
+                          )}
+                        </div>
                       </div>
-                    </div>
 
-                    {/* Content */}
-                    <div className="flex-1 pt-2">
-                      <div className="text-[11px] text-gray-500 uppercase tracking-widest mb-3 font-light">
-                        {study.category}
+                      {/* Content */}
+                      <div className="flex-1 pt-2">
+                        <div className="text-[11px] text-gray-500 uppercase tracking-widest mb-3 font-light">
+                          {study.category || "General"}
+                        </div>
+                        <h2 className="text-xl md:text-2xl lg:text-[28px] font-semibold mb-4 leading-tight group-hover:text-blue-400 transition-colors">
+                          {study.title}
+                        </h2>
+                        <p className="text-gray-400 leading-relaxed text-[15px] md:text-base line-clamp-3">
+                          "{study.heroQuote}"
+                        </p>
                       </div>
-                      <h2 className="text-xl md:text-2xl lg:text-[28px] font-semibold mb-4 leading-tight group-hover:text-blue-400 transition-colors">
-                        {study.title}
-                      </h2>
-                      <p className="text-gray-400 leading-relaxed text-[15px] md:text-base">
-                        "{study.description}"
-                      </p>
                     </div>
-                  </div>
-                </Link>
-              </motion.article>
-            ))}
+                  </Link>
+                </motion.article>
+              ))
+            )}
           </div>
         </main>
 

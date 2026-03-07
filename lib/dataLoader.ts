@@ -23,8 +23,22 @@ export function loadBlogsData() {
   return readData<BlogsData>("blogs.json");
 }
 
+export function loadBlogBySlug(slug: string): BlogPost | null {
+  const data = readData<BlogsData>("blogs.json");
+  const all = [...data.popularPosts, ...data.newestPosts];
+  return all.find((p) => p.slug === slug) ?? null;
+}
+
 export function loadServicesData() {
   return readData<ServicesData>("services.json");
+}
+
+export function loadCaseStudiesData() {
+  return readData<CaseStudiesData>("casestudies.json");
+}
+
+export function loadSectionsConfig() {
+  return readData<SectionsConfig>("sections.json");
 }
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -103,6 +117,7 @@ export interface BlogPost {
   date: string;
   image: string;
   category: string;
+  content?: string;
 }
 
 export interface BlogsData {
@@ -123,4 +138,49 @@ export interface ServicesData {
   branding: ServiceSlide;
   technology: ServiceSlide;
   experience: ServiceSlide;
+}
+
+export interface CaseStudy {
+  id?: string;
+  slug: string;
+  title: string;
+  category: string;
+  heroQuote: string;
+  heroImage: string;
+  introduction: string;
+  sections: {
+    title: string;
+    content: string;
+  }[];
+  location?: string;
+  featured?: boolean;
+}
+
+export interface CaseStudiesData {
+  cases: CaseStudy[];
+}
+
+export interface SectionConfig {
+  id: string;
+  label: string;
+  enabled: boolean;
+}
+
+export interface SectionsConfig {
+  sections: SectionConfig[];
+}
+
+export interface Product {
+  id: string;
+  name: string;
+  tagline: string;
+  image: string;
+  description: string | string[];
+  tryUrl: string;
+  featured?: boolean;
+  available?: boolean;
+}
+
+export interface ProductsData {
+  products: Product[];
 }
